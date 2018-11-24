@@ -1,0 +1,64 @@
+<div class="signup-container">
+  <mat-card class="signup-card">
+    <img mat-card-image src="https://fontmeme.com/permalink/180923/7d95b1af3bc6a2edd6b5c31370e73e2d.png" alt="Photo of a Shiba Inu">
+    <mat-card-header>
+      <mat-card-title>Create your Account</mat-card-title>
+      <mat-card-subtitle>to continue to Metropolist</mat-card-subtitle>
+    </mat-card-header>
+
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+      <mat-grid-list cols="2" rowHeight="2:1">
+        <input type="hidden" formControlName="$key">
+
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
+          <mat-form-field class="form-field">
+            <input formControlName="email" matInput placeholder="Enter your email" required>
+            <mat-error *ngIf="signUpForm.controls['email'].errors?.required">Email is required.</mat-error>
+            <mat-error *ngIf="signUpForm.controls['email'].errors?.email">Email should be typed in right format.</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field class="form-field">
+            <input formControlName="firstname" matInput placeholder="Firstname" required>
+            <mat-error>Firstname is required.</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field class="form-field">
+            <input formControlName="lastname" matInput placeholder="Lastname" required>
+            <mat-error>Lastname is required.</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field class="form-field">
+            <input formControlName="password" matInput required placeholder="Password" [type]="hide ? 'password' : 'text'">
+            <mat-error *ngIf="signUpForm.controls['password'].errors?.required">Password is required.</mat-error>
+            <mat-error *ngIf="signUpForm.controls['password'].errors?.minLength">Minimum 3 characters needed.</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+
+        <mat-grid-tile [colspan]="1" [rowspan]="1">
+          <mat-form-field class="form-field">
+            <input formControlName="confirmPassword" matInput required placeholder="Confirm" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            <mat-error *ngIf="signUpForm.controls['confirmPassword'].errors?.required">Confirm password is required.</mat-error>
+            <mat-error *ngIf="signUpForm.controls['confirmPassword'].errors?.minLength">Minimum 3 characters needed.</mat-error>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div>
+        <p>Already have an account? Go <a mat-raised-button class="left" [routerLink]="['/login']">Log in</a></p>
+      </div>
+
+      <mat-card-actions>
+        <a mat-raised-button color="warn" (click)="onClear()">Clear</a>
+        <button mat-raised-button color="primary" [disabled]="signUpForm.invalid || loading" type="submit">Sign up</button>
+        <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      </mat-card-actions>
+    </form>
+
+  </mat-card>
+</div>

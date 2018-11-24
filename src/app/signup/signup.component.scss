@@ -1,0 +1,41 @@
+.signup-container {
+  padding: 5%;
+  height: auto;
+  min-height: 560px;
+  display: block;
+  text-align: center;
+  flex-direction: column;
+}
+
+.signup-card {
+  width: 420px;
+  height: inherit;
+  min-width: 600px;
+  padding: 3%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.signup-card > * {
+  margin: auto;
+  width: 50%;
+  padding: 10px; 
+}
+
+.form-field {
+  width: 100%;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}

@@ -1,0 +1,9 @@
+<!-- <div class="mat-app-background basic-container">
+  <app-sidenav>loading...</app-sidenav>
+</div> -->
+
+<app-nav></app-nav>
+<div class="dashboard-container">
+  <app-user *ngIf="isUser"></app-user>
+  <app-admin *ngIf="isAdmin"></app-admin>
+</div>

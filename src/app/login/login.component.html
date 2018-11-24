@@ -1,0 +1,31 @@
+<div class="login-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-card class="login-card">
+            <img mat-card-image src="https://fontmeme.com/permalink/180923/7d95b1af3bc6a2edd6b5c31370e73e2d.png" alt="Photo of a Shiba Inu">
+            <mat-card-header>
+                <mat-card-title>Log in</mat-card-title>
+                <mat-card-subtitle>to continue to Metropolist</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-form-field class="form-field">
+                <input matInput required formControlName="email" placeholder="Enter your email">
+                <mat-error *ngIf="loginForm.controls['email'].errors?.required">Email is required.</mat-error>
+                <mat-error *ngIf="loginForm.controls['email'].errors?.email">Email should be typed in right format.</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="form-field">
+                <input matInput required formControlName="password" placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix class="pointer" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="loginForm.controls['password'].errors?.required">Confirm password is required.</mat-error>
+                <mat-error *ngIf="loginForm.controls['password'].errors?.minLength">Minimum 3 characters needed.</mat-error>
+            </mat-form-field>
+
+            <a mat-button class="left" [routerLink]="['/signup']">Create account</a>
+            <mat-divider [vertical]="true"></mat-divider>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" [disabled]="loginForm.invalid || loading" type="submit">Log in</button>
+                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>

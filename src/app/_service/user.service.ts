@@ -9,11 +9,10 @@ import { User } from '../_model/user.model';
 export class UserService {
   private rootUrl = `http://localhost:3000`;
   private fakeUrl = `https://jsonplaceholder.typicode.com/posts`;
-  
   constructor(private http: HttpClient) { }
 
-  signup(user : User){
-    const body: User = {
+  signup(user: User) {
+    const body = {
       email: user.email,
       password: user.password,
       firstname: user.firstname,
@@ -21,11 +20,22 @@ export class UserService {
       role: "user",
       enabled: true
     }
-    return this.http.post(this.rootUrl + `/auth/signup`, body);
+    return this.http.post(this.rootUrl + `/metro/auth/signup`, body);
   }
 
   getUsers() {
-    return this.http.get<User[]>(this.rootUrl + `/api/users`);
+    return this.http.get<User[]>(this.rootUrl + `/metro/api/v1/users`);
+  }
+
+  createMap(map: Map) {
+    const body = {
+      uid: map.uid,
+      name: map.name,
+      img: map.img,
+      data: map.data
+    }
+    console.log("body: ",body);
+    return this.http.post<any>(this.rootUrl + `/metro/api/v1/map/create`, body);
   }
 
   getMaps(id: string) {

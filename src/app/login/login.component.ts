@@ -77,12 +77,13 @@ export class LoginComponent implements OnInit, OnDestroy {
           });
         },
         error => {
-          console.log();
           this.loading = false;
           this.router.navigate(['/login']).then(() => {
-            this.snackBar.open(error.error.msg, "OK", {
-              duration: 5000
-            });
+            if(error) {
+              this.snackBar.open(error.error.msg, "OK", {
+                duration: 5000
+              });
+            }
           });;
         });
   }

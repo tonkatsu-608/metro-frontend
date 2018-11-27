@@ -18,13 +18,14 @@ export class AdminComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private userService: UserService) {
-    this.userService.getUsers().pipe(first()).subscribe(data => {
-      this.users = data;
-      this.dataSource  = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
+  constructor(
+    private userService: UserService) {
+      this.userService.getUsers().pipe(first()).subscribe(data => {
+        this.users = data;
+        this.dataSource  = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
    }
 
   ngOnInit() {

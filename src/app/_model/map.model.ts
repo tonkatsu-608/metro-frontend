@@ -1,6 +1,6 @@
 export class Map {
-  userId: string;
-  mapId: string;
+  uid: string;
   name: string;
-  data: string;
+  img: any;
+  data: Object;
 }

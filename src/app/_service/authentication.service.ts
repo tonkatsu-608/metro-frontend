@@ -20,7 +20,7 @@ export class AuthenticationService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<any>('http://localhost:3000/auth/login', { username: email, password: password })
+    return this.http.post<any>('http://localhost:3000/metro/auth/login', { username: email, password: password })
       .pipe(map(data => {
         // login successful if there's a jwt token in the response
         // if (user && user.token) {
@@ -37,5 +37,6 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+    return this.http.post<any>('http://localhost:3000/metro/api/v1/logout', null);
   }
 }

@@ -28,8 +28,9 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   isUser: boolean;
   currentMap: Map;
   currentUser: User;
+  currentMapSubscription: Subscription;
   currentUserSubscription: Subscription;
-  canvas: HTMLCanvasElement = d3.select("#myCanvas");
+  canvas: any;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -41,17 +42,22 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
       if (this.currentUser && this.currentUser.role === 'user') { this.isUser = true; } else { this.isUser = false; }
     });
 
-    this.currentUserSubscription = this.mapService.currentMap.subscribe(map => {
+    this.currentMapSubscription = this.mapService.currentMap.subscribe(map => {
       this.currentMap = map;
     });
   }
 
   ngOnInit() {
+    if (this.currentMap) {
+      this.mapService.removeCurrentMapFormLocalStorage;
+    }
+    this.canvas = d3.select("#myCanvas").node();
     this.metro = new Metro(this.canvas, this.currentMap ? this.currentMap.sites : null, this.currentMap ? this.currentMap.clusters : null);
   }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
+    this.currentMapSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
   }
 
@@ -60,8 +66,8 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     let map = {
       uid: this.currentUser._id,
-      name: "map1",
-      img: "img_URL",
+      name: "map6",
+      img: this.imgURL,
       sites: this.metro.graphics.sites,
       clusters: this.metro.graphics.clusters,
       createDate: createDate,
@@ -84,7 +90,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
         });
   }
 
-  get ImgURL() {
+  get imgURL() {
     return this.canvas.toDataURL();
   }
 

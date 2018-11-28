@@ -18,7 +18,7 @@ export class UserComponent implements OnInit {
   maps: Map[] = [];
   currentUser: User;
   currentUserSubscription: Subscription;
-  displayedColumns: string[] = ['name', 'img', 'operation'];
+  displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate' ,'operation'];
   dataSource: MatTableDataSource<Map>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
@@ -73,7 +72,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.userService.signup(this.signUpForm.value)
-      .pipe(first())
       .subscribe(
         data => {
           this.router.navigate(['/login']).then(() => {

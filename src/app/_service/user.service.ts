@@ -8,7 +8,6 @@ import { User } from '../_model/user.model';
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private rootUrl = `http://localhost:3000`;
-  private fakeUrl = `https://jsonplaceholder.typicode.com/posts`;
   constructor(private http: HttpClient) { }
 
   signup(user: User) {
@@ -32,13 +31,15 @@ export class UserService {
       uid: map.uid,
       name: map.name,
       img: map.img,
-      data: map.data
+      sites: map.sites,
+      clusters: map.clusters,
+      createDate: map.createDate,
+      editDate: map.editDate
     }
-    console.log("body: ",body);
-    return this.http.post<any>(this.rootUrl + `/metro/api/v1/map/create`, body);
+    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, body);
   }
 
   getMaps(id: string) {
-    return this.http.get<Map[]>(this.fakeUrl);
+    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/maps`);
   }
 }

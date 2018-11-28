@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
@@ -67,7 +66,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loading = true;
     // this.userService.login(this.loginForm.value)
     this.authenticationService.login(this.f.email.value, this.f.password.value)
-      .pipe(first())
       .subscribe(
         data => {
           this.router.navigate([this.returnUrl]).then(() => {

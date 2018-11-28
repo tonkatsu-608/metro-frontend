@@ -18,6 +18,7 @@ import { UserService } from './_service/user.service';
 import { UserComponent } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { MapComponent } from './map/map.component';
+import { MapGuard } from './_guard/map.guard';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { MapComponent } from './map/map.component';
     MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  providers: [UserService],
+  providers: [UserService, MapGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

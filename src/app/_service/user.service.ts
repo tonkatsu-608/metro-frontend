@@ -26,7 +26,7 @@ export class UserService {
     return this.http.get<User[]>(this.rootUrl + `/metro/api/v1/users`);
   }
 
-  createMap(map: Map) {
+  saveMap(map: Map) {
     const body = {
       uid: map.uid,
       name: map.name,
@@ -36,7 +36,7 @@ export class UserService {
       createDate: map.createDate,
       editDate: map.editDate
     }
-    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, body);
+    return this.http.post(this.rootUrl + `/metro/api/v1/map/save`, body);
   }
 
   getMaps(id: string) {

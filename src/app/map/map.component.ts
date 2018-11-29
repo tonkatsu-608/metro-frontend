@@ -1,9 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { HostListener } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { formatDate } from '@angular/common';
+import { MatSnackBar } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
+import 'rxjs/add/operator/filter';
+
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
@@ -24,16 +26,19 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   loading = false;
   submitted = false;
   metro: any;
+  mode: string;
   isSave: boolean;
   isUser: boolean;
+  mapName: string;
   currentMap: Map;
   currentUser: User;
+  canvas: HTMLCanvasElement;
   currentMapSubscription: Subscription;
   currentUserSubscription: Subscription;
-  canvas: any;
 
   constructor(
     public snackBar: MatSnackBar,
+    private route: ActivatedRoute,
     private mapService: MapService,
     private userService: UserService,
     private authenticationService: AuthenticationService) {
@@ -48,11 +53,24 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   }
 
   ngOnInit() {
-    if (this.currentMap) {
-      this.mapService.removeCurrentMapFormLocalStorage;
-    }
+    this.route.queryParams
+      .filter(params => params.mode)
+      .subscribe(params => {
+        this.mode = params.mode;
+      });
+    this.route.queryParams
+      .filter(params => params.mapName)
+      .subscribe(params => {
+        this.mapName = params.mapName;
+      });
+    console.log(this.mode);
     this.canvas = d3.select("#myCanvas").node();
-    this.metro = new Metro(this.canvas, this.currentMap ? this.currentMap.sites : null, this.currentMap ? this.currentMap.clusters : null);
+    if (this.mode === 'create') {
+      this.currentMap = new Map();
+      this.metro = new Metro(this.canvas, null, null);
+    } else if (this.mode === 'edit' && this.currentMap) {
+      this.metro = new Metro(this.canvas, this.currentMap.sites, this.currentMap.clusters);
+    }
   }
 
   ngOnDestroy() {
@@ -62,18 +80,19 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   }
 
   saveMap() {
+    console.log(this.mapName);
     this.loading = true;
     let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     let map = {
       uid: this.currentUser._id,
-      name: "map6",
+      name: this.mapName,
       img: this.imgURL,
       sites: this.metro.graphics.sites,
       clusters: this.metro.graphics.clusters,
       createDate: createDate,
       editDate: createDate
     }
-    this.userService.createMap(map)
+    this.userService.saveMap(map)
       .subscribe(
         data => {
           this.loading = false;
@@ -106,4 +125,5 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
       return false;
     }
   }
+
 }

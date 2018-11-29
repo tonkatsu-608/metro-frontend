@@ -7,15 +7,14 @@
     <mat-grid-tile></mat-grid-tile>
   </mat-grid-list>
 </div>
-
-<p>
+<!-- <p>
   <mat-form-field appearance="outline">
     <mat-label>Search for user</mat-label>
     <input matInput>
     <mat-icon matSuffix class="pointer" (click)="onSearch()">search</mat-icon>
     <mat-hint>email, firstname, lastname...</mat-hint>
   </mat-form-field>
-</p>
+</p> -->
 
 <div *ngIf="maps">
   <mat-form-field>
@@ -74,7 +73,7 @@
 </div>
 
 <div class="example-button-row">
-  <button mat-fab class="create-btn" color="primary" matTooltip="Create Map" (click)="createMap()">
+  <button mat-fab class="create-btn" color="primary" matTooltip="Create Map" (click)="openDialog()">
     <mat-icon aria-label="create a map">add</mat-icon>
   </button>
 </div>

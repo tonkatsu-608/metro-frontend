@@ -6,4 +6,5 @@ export class User {
   password: string;
   role: string;
   enabled: boolean;
+  data: object;
 }

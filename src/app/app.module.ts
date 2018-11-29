@@ -15,7 +15,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 
 import { UserService } from './_service/user.service';
-import { UserComponent } from './user/user.component';
+import { UserComponent, CreateMapDialog } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { MapComponent } from './map/map.component';
 import { MapGuard } from './_guard/map.guard';
@@ -30,7 +30,8 @@ import { MapGuard } from './_guard/map.guard';
     SignupComponent,
     UserComponent,
     AdminComponent,
-    MapComponent
+    MapComponent,
+    CreateMapDialog
   ],
   imports: [
     BrowserModule,
@@ -43,6 +44,7 @@ import { MapGuard } from './_guard/map.guard';
     ReactiveFormsModule,
   ],
   providers: [UserService, MapGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CreateMapDialog]
 })
 export class AppModule { }

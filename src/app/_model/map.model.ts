@@ -1,4 +1,5 @@
 export class Map {
+  id: string;
   uid: string;
   name: string;
   img: any;

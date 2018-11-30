@@ -15,7 +15,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 
 import { UserService } from './_service/user.service';
-import { UserComponent, CreateMapDialog } from './user/user.component';
+import { UserComponent, CreateMapDialog, DeleteMapDialog } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
 import { MapComponent } from './map/map.component';
 import { MapGuard } from './_guard/map.guard';
@@ -31,6 +31,7 @@ import { MapGuard } from './_guard/map.guard';
     UserComponent,
     AdminComponent,
     MapComponent,
+    DeleteMapDialog,
     CreateMapDialog
   ],
   imports: [
@@ -45,6 +46,6 @@ import { MapGuard } from './_guard/map.guard';
   ],
   providers: [UserService, MapGuard],
   bootstrap: [AppComponent],
-  entryComponents: [CreateMapDialog]
+  entryComponents: [CreateMapDialog, DeleteMapDialog]
 })
 export class AppModule { }

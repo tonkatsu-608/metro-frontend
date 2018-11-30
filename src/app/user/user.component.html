@@ -7,6 +7,7 @@
     <mat-grid-tile></mat-grid-tile>
   </mat-grid-list>
 </div>
+
 <!-- <p>
   <mat-form-field appearance="outline">
     <mat-label>Search for user</mat-label>
@@ -57,10 +58,9 @@
           <button class="operation-btn" mat-raised-button (click)="editMap(row.name)">
             <mat-icon class="example-icon">edit</mat-icon>
           </button>
-          <button class="operation-btn" mat-raised-button>
+          <button class="operation-btn" mat-raised-button (click)="openDeleteDialog(row.name)">
             <mat-icon class="example-icon">delete</mat-icon>
           </button>
-
         </td>
       </ng-container>
 
@@ -73,7 +73,7 @@
 </div>
 
 <div class="example-button-row">
-  <button mat-fab class="create-btn" color="primary" matTooltip="Create Map" (click)="openDialog()">
+  <button mat-fab class="create-btn" color="primary" matTooltip="Create Map" (click)="openCreateDialog()">
     <mat-icon aria-label="create a map">add</mat-icon>
   </button>
 </div>

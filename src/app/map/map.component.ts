@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs';
 import 'rxjs/add/operator/filter';
 
-
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
@@ -41,16 +40,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     private route: ActivatedRoute,
     private mapService: MapService,
     private userService: UserService,
-    private authenticationService: AuthenticationService) {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-      this.currentUser = user;
-      if (this.currentUser && this.currentUser.role === 'user') { this.isUser = true; } else { this.isUser = false; }
-    });
-
-    this.currentMapSubscription = this.mapService.currentMap.subscribe(map => {
-      this.currentMap = map;
-    });
-  }
+    private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.route.queryParams
@@ -63,7 +53,13 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
       .subscribe(params => {
         this.mapName = params.mapName;
       });
-    console.log(this.mode);
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      if (this.currentUser && this.currentUser.role === 'user') { this.isUser = true; } else { this.isUser = false; }
+    });
+    this.currentMapSubscription = this.mapService.currentMap.subscribe(map => {
+      this.currentMap = map;
+    });
     this.canvas = d3.select("#myCanvas").node();
     if (this.mode === 'create') {
       this.currentMap = new Map();
@@ -74,25 +70,27 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   }
 
   ngOnDestroy() {
+    this.mapService.removeCurrentMapFormLocalStorage();
     // unsubscribe to ensure no memory leaks
     this.currentMapSubscription.unsubscribe();
     this.currentUserSubscription.unsubscribe();
   }
 
   saveMap() {
-    console.log(this.mapName);
     this.loading = true;
     let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
-    let map = {
-      uid: this.currentUser._id,
-      name: this.mapName,
-      img: this.imgURL,
-      sites: this.metro.graphics.sites,
-      clusters: this.metro.graphics.clusters,
-      createDate: createDate,
-      editDate: createDate
+    let map = new Map();
+    if(this.mode === 'edit') {
+      map.id = this.currentMap.id;
     }
-    this.userService.saveMap(map)
+    map.uid = this.currentUser.id;
+    map.img = this.imgURL;
+    map.sites = this.metro.graphics.sites;
+    map.clusters = this.metro.graphics.clusters;
+    map.createDate = createDate;
+    map.editDate = createDate;
+    map.name = this.mapName;
+    this.userService.saveMap(map, this.mode)
       .subscribe(
         data => {
           this.loading = false;

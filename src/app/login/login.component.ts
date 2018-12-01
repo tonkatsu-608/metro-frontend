@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: new FormControl('', [Validators.required, Validators.minLength(3)])
     });
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   ngOnDestroy() {

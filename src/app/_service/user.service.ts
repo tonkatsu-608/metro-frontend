@@ -29,14 +29,16 @@ export class UserService {
     return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/maps/` + uid);
   }
 
-  saveMap(map: Map, mode: string) {
-    if(mode === 'create') {
-      return this.http.post(this.rootUrl + `/metro/api/v1/map/save`, map);
-    } else if(mode === 'edit') {
-      return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
-    } else {
-      console.log('error save map');
-    }
+  getMap(id: string) {
+    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
+  }
+
+  createMap(map: Map) {
+    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
+  }
+
+  saveMap(map: Map) {
+    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
   }
 
   deleteMap(id: string) {

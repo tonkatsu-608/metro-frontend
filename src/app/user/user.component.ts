@@ -2,17 +2,18 @@ import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
+import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
-import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
 import { AuthenticationService } from '../_service/authentication.service';
 
 export interface DialogData {
   id: string;
+  uid: string;
   mapName: string;
 }
 
@@ -36,7 +37,6 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private router: Router,
-    private mapService: MapService,
     private userService: UserService,
     private authenticationService: AuthenticationService) { }
 
@@ -58,17 +58,14 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
-  editMap(mapName): void {
-    const map = this.findMapById(mapName);
-    this.mapService.setCurrentMap2LocalStorage(map);
-    this.router.navigate(['/map'], { queryParams: { mapName: map.name, mode: 'edit' } });
+  editMap(id): void {
+    this.router.navigate(['/map/' + id]);
   }
 
-  openDeleteDialog(mapName): void {
-    const map = this.findMapById(mapName);
+  openDeleteDialog(id, name): void {
     const dialogRef = this.dialog.open(DeleteMapDialog, {
       width: '320px',
-      data: { mapName: mapName, id: map.id }
+      data: { mapName: name, id: id }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.id = result;
@@ -79,19 +76,12 @@ export class UserComponent implements OnInit, OnDestroy {
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(CreateMapDialog, {
       width: '250px',
-      data: { mapName: this.mapName }
+      data: { mapName: this.mapName, uid: this.currentUser.id }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.mapName = result;
+      this.refresh();
     });
-  }
-
-  findMapById(mapName): Map {
-    for (let i = 0; i < this.maps.length; i++) {
-      if (this.maps[i].name === mapName) {
-        return this.maps[i];
-      }
-    }
   }
 
   refresh(): void {
@@ -105,6 +95,9 @@ export class UserComponent implements OnInit, OnDestroy {
 
 }
 
+/*=====================================================================================================
+                                            Delete Map
+======================================================================================================*/
 @Component({
   selector: 'delete-map-dialog',
   templateUrl: 'delete-map-dialog.html',
@@ -140,14 +133,20 @@ export class DeleteMapDialog {
   }
 }
 
+/*=====================================================================================================
+                                            Create Map
+======================================================================================================*/
 @Component({
   selector: 'create-map-dialog',
   templateUrl: 'create-map-dialog.html',
 })
 export class CreateMapDialog {
+  loading: boolean;
 
   constructor(
     private router: Router,
+    private userService: UserService,
+    public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateMapDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
@@ -156,6 +155,28 @@ export class CreateMapDialog {
   }
 
   onCreate(): void {
-    this.router.navigate(['/map'], { queryParams: { mapName: this.data.mapName, mode: 'create' } });
+    this.loading = true;
+    let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+    let map = new Map();
+    map.uid = this.data.uid;
+    map.createDate = createDate;
+    map.editDate = createDate;
+    map.name = this.data.mapName;
+    map.img = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // The Tiniest GIF Ever
+    this.userService.createMap(map)
+      .subscribe(
+        data => {
+          this.loading = false;
+          this.router.navigate(['/map/' + data]);
+          this.snackBar.open(this.data.mapName + " created successfully!", "OK", {
+            duration: 5000
+          });
+        },
+        error => {
+          this.loading = false;
+          this.snackBar.open(error.error.error, "OK", {
+            duration: 5000
+          });
+        });
   }
 }

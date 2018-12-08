@@ -1,0 +1,44 @@
+.profile-stretched-tabs {
+  max-width: 100%;
+}
+
+.profile-form {
+  // margin: 16px;
+}
+
+.profile-card {
+  max-width: 100%;
+  margin: 24px;
+}
+
+.profile-avatar {
+  // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  // background-size: cover;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #fff;
+  cursor: pointer;
+}
+
+.profile-backgound {
+  min-height: 180px;
+  background: #e6e6e6;
+}
+
+.profile-username {
+  font-size: 32px;
+  margin-top: 32px !important;
+}
+
+.edit-btn {
+  margin: -64px 12px 0 0 !important;
+}
+
+.margin-top {
+  margin-top: -60px;
+  overflow: hidden;
+}
+
+.padding-0 {
+  padding: 0;
+}

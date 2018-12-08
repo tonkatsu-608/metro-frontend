@@ -1,0 +1,64 @@
+<app-nav></app-nav>
+<div class="container basic-container">
+  <mat-tab-group mat-stretch-tabs class="profile-stretched-tabs mat-elevation-z4">
+    <mat-tab label="personal info">
+
+      <form class="profile-form">
+        <!-- <mat-grid-list cols="3" rowHeight="2:1" class="mat-elevation-z2">
+          <mat-grid-tile [colspan]="3" [rowspan]="1">1</mat-grid-tile>
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="profile-avatar margin-top mat-elevation-z2"/>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <div class="profile-username margin-top">
+              {{currentUser.firstname}} {{currentUser.lastname}}
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-list role="list">
+          <mat-list-item role="listitem">
+            <mat-form-field class="example-full-width">
+              <textarea matInput placeholder="Leave a comment"></textarea>
+            </mat-form-field>
+          </mat-list-item>
+          <mat-list-item role="listitem">Item 2</mat-list-item>
+          <mat-list-item role="listitem">Item 3</mat-list-item>
+        </mat-list> -->
+
+        <mat-card class="padding-0 mat-elevation-z0">
+          <mat-card-header class="profile-backgound"></mat-card-header>
+          <div class="margin-top">
+            <mat-card-header>
+              <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="profile-avatar mat-elevation-z2 center" />
+            </mat-card-header>
+            <mat-card-title class="right edit-btn">
+              <button mat-icon-button class="mat-elevation-z0">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </mat-card-title>
+            <mat-card-title class="profile-username center">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
+          </div>
+        </mat-card>
+
+        <mat-card class="profile-card mat-elevation-z4">
+          <mat-card-content>
+            <p>
+              The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+              A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+              bred for hunting.
+            </p>
+          </mat-card-content>
+          <mat-card-actions class="right">
+            <button mat-button>LIKE</button>
+            <button mat-button>SHARE</button>
+          </mat-card-actions>
+        </mat-card>
+
+      </form>
+
+    </mat-tab>
+    <mat-tab label="Second"> Content 2 </mat-tab>
+    <mat-tab label="Third"> Content 3 </mat-tab>
+  </mat-tab-group>
+</div>

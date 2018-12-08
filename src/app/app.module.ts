@@ -20,6 +20,7 @@ import { AdminComponent } from './admin/admin.component';
 import { MapComponent } from './map/map.component';
 import { MapGuard } from './_guard/map.guard';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     MapComponent,
     DeleteMapDialog,
     CreateMapDialog,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

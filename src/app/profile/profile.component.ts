@@ -1,18 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 
 import { User } from '../_model/user.model';
 import { AuthenticationService } from '../_service/authentication.service';
-
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-
-export class SidenavComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnInit {
   currentUser: User;
   currentUserSubscription: Subscription;
 
@@ -33,7 +31,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.currentUserSubscription.unsubscribe();
   }
 
-  logout() {
+  eg () {
     this.authenticationService.logout();
     this.router.navigate(['/login']).then(() => {
       this.snackBar.open("Logout successfully", "OK", {
@@ -42,4 +40,3 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
   }
 }
-

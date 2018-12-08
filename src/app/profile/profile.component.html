@@ -2,60 +2,83 @@
 <div class="container basic-container">
   <mat-tab-group mat-stretch-tabs class="profile-stretched-tabs mat-elevation-z4">
     <mat-tab label="personal info">
+      <mat-card class="padding-0 mat-elevation-z0">
+        <mat-card-header class="profile-backgound" (mouseenter)="onBgEnter($event)" (mouseleave)="onBgLeave($event)">
+          <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button">
+            <mat-icon>camera_alt</mat-icon>
+          </button>
+        </mat-card-header>
 
-      <form class="profile-form">
-        <!-- <mat-grid-list cols="3" rowHeight="2:1" class="mat-elevation-z2">
-          <mat-grid-tile [colspan]="3" [rowspan]="1">1</mat-grid-tile>
-          <mat-grid-tile [colspan]="3" [rowspan]="1">
-            <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="profile-avatar margin-top mat-elevation-z2"/>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="3" [rowspan]="1">
-            <div class="profile-username margin-top">
-              {{currentUser.firstname}} {{currentUser.lastname}}
-            </div>
-          </mat-grid-tile>
-        </mat-grid-list>
-
-        <mat-list role="list">
-          <mat-list-item role="listitem">
-            <mat-form-field class="example-full-width">
-              <textarea matInput placeholder="Leave a comment"></textarea>
-            </mat-form-field>
-          </mat-list-item>
-          <mat-list-item role="listitem">Item 2</mat-list-item>
-          <mat-list-item role="listitem">Item 3</mat-list-item>
-        </mat-list> -->
-
-        <mat-card class="padding-0 mat-elevation-z0">
-          <mat-card-header class="profile-backgound"></mat-card-header>
-          <div class="margin-top">
-            <mat-card-header>
-              <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="profile-avatar mat-elevation-z2 center" />
-            </mat-card-header>
-            <mat-card-title class="right edit-btn">
-              <button mat-icon-button class="mat-elevation-z0">
-                <mat-icon>edit</mat-icon>
-              </button>
-            </mat-card-title>
-            <mat-card-title class="profile-username center">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
+        <mat-card-header class="profile-header">
+          <div class="profile-avatar center" (mouseenter)="onAvatarEnter($event)" (mouseleave)="onAvatarLeave($event)">
+            <button mat-icon-button class="mat-elevation-z1 avatar-camera-btn" *ngIf="isEnter" type="button">
+              <mat-icon>camera_alt</mat-icon>
+            </button>
+            <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="avatar mat-elevation-z2" />
           </div>
-        </mat-card>
+          <!-- <button mat-icon-button class="mat-elevation-z0 edit-btn">
+              <mat-icon>edit</mat-icon>
+            </button> -->
+        </mat-card-header>
+        <mat-card-title class="profile-username center">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
+      </mat-card>
 
-        <mat-card class="profile-card mat-elevation-z4">
-          <mat-card-content>
-            <p>
-              The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-              A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-              bred for hunting.
-            </p>
-          </mat-card-content>
-          <mat-card-actions class="right">
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-          </mat-card-actions>
-        </mat-card>
+      <mat-grid-list cols="2" rowHeight="9:4">
+        <mat-grid-tile>
+          <mat-card class="profile-card mat-elevation-z4">
+            <mat-card-header class="update-header">
+              Change Email
+              <button mat-icon-button class="update-btn" type="button" matTooltip="update email" *ngIf="isEmailChanged" (click)="updateEmail(email.value)">
+                <mat-icon>update</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field class="example-full-width">
+                  <!-- [ngModelOptions]="{standalone: true}" -->
+                <input matInput email #email placeholder="Email" [ngModel]="currentUser.email" (ngModelChange)="emailChanged($event)">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
 
-      </form>
+        <mat-grid-tile>
+          <mat-card class="profile-card mat-elevation-z4">
+            <mat-card-header class="update-header">
+              Change Name
+              <button mat-icon-button class="update-btn" type="button" matTooltip="update name" *ngIf="isNameChanged">
+                <mat-icon>update</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Firstname" [ngModel]="currentUser.firstname" (ngModelChange)="firstnameChanged($event)">
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Lastname" [ngModel]="currentUser.lastname" (ngModelChange)="lastnameChanged($event)">
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <mat-card class="profile-card mat-elevation-z4">
+            <mat-card-header class="update-header">
+              Change Password
+              <button mat-icon-button class="update-btn" type="button" matTooltip="change password">
+                <mat-icon>update</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'">
+                <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </mat-form-field>
+            </mat-card-content>
+          </mat-card>
+        </mat-grid-tile>
+
+        <mat-grid-tile>4</mat-grid-tile>
+      </mat-grid-list>
 
     </mat-tab>
     <mat-tab label="Second"> Content 2 </mat-tab>

@@ -2,43 +2,94 @@
   max-width: 100%;
 }
 
-.profile-form {
-  // margin: 16px;
-}
-
 .profile-card {
   max-width: 100%;
   margin: 24px;
 }
 
-.profile-avatar {
-  // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  // background-size: cover;
-  width: 120px;
-  height: 120px;
-  border: 2px solid #fff;
-  cursor: pointer;
-}
-
 .profile-backgound {
   min-height: 180px;
   background: #e6e6e6;
+  cursor: pointer;
 }
 
-.profile-username {
-  font-size: 32px;
-  margin-top: 32px !important;
-}
-
-.edit-btn {
-  margin: -64px 12px 0 0 !important;
-}
-
-.margin-top {
+.profile-header {
   margin-top: -60px;
   overflow: hidden;
 }
 
+.profile-username {
+  font-size: 32px;
+}
+
+.edit-btn {
+  position: absolute;
+  top: 190px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+}
+
+.bg-camera-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0,0,0,0.26);
+  color: rgba(255, 255, 255, 1);
+}
+
+.avatar-camera-btn {
+  position: absolute;
+  top: 154px;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  margin-left: -16px;
+  background: rgba(0,0,0,0.26);
+  color: rgba(255, 255, 255, 1);}
+
+.profile-avatar {
+  // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  // background-size: cover;
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  cursor: pointer;
+  margin-top: -1.5px;
+  margin-left: -16px;
+  border: 2px solid #fff;
+}
+
 .padding-0 {
   padding: 0;
+}
+
+.profile-input {
+  margin: 10px;
+}
+
+.example-full-width {
+  width: 100%;
+  min-width: 400px;
+}
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+.update-header {
+  margin: 0 0 16px -32px !important;
+}
+
+.update-btn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
 }

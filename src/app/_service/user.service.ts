@@ -30,18 +30,22 @@ export class UserService {
   }
 
   getMap(id: string) {
-    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
+    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/m/` + id);
   }
 
   createMap(map: Map) {
-    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
+    return this.http.post(this.rootUrl + `/metro/api/v1/m/create`, map);
   }
 
   saveMap(map: Map) {
-    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
+    return this.http.put(this.rootUrl + `/metro/api/v1/m/update`, map);
   }
 
   deleteMap(id: string) {
-    return this.http.delete(this.rootUrl + `/metro/api/v1/map/delete/` + id);
+    return this.http.delete(this.rootUrl + `/metro/api/v1/m/delete/` + id);
+  }
+
+  updateUser(user: User) {
+    return this.http.put(this.rootUrl + `/metro/api/v1/u/update`, user);
   }
 }

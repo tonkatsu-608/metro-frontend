@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material';
 import { MaterialModule } from './material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -13,7 +14,6 @@ import { NavComponent } from './nav/nav.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
-
 import { UserService } from './_service/user.service';
 import { UserComponent, CreateMapDialog, DeleteMapDialog } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
@@ -47,6 +47,7 @@ import { ProfileComponent } from './profile/profile.component';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    DragDropModule
   ],
   providers: [UserService, MapGuard],
   bootstrap: [AppComponent],

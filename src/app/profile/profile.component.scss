@@ -80,10 +80,6 @@
   min-width: 400px;
 }
 
-mat-grid-tile {
-  background: lightblue;
-}
-
 .update-header {
   margin: 0 0 16px -32px !important;
 }
@@ -91,5 +87,11 @@ mat-grid-tile {
 .update-btn {
   position: absolute;
   right: 8px;
+  top: 8px;
+}
+
+.change-password-btn {
+  position: absolute;
+  right: 56px;
   top: 8px;
 }

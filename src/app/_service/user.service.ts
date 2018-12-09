@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
@@ -26,7 +26,7 @@ export class UserService {
   }
 
   getMaps(uid: string) {
-    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/maps/` + uid);
+    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/${uid}/maps/`);
   }
 
   getMap(id: string) {
@@ -50,7 +50,7 @@ export class UserService {
       id: id,
       email: email
     }
-    return this.http.put(this.rootUrl + `/metro/api/v1/u/update/email`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/email`, body);
   }
 
   updateName(firstname: string, lastname: string, id: string) {
@@ -59,6 +59,22 @@ export class UserService {
       firstname: firstname,
       lastname: lastname
     }
-    return this.http.put(this.rootUrl + `/metro/api/v1/u/update/name`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/name`, body);
+  }
+
+  verifyPassword(password: string, id: string) {
+    const body = {
+      id: id,
+      password: password
+    }
+    return this.http.patch(this.rootUrl + `/metro/api/v1/u/verify/password`, body);
+  }
+
+  updatePassword(password: string, id: string) {
+    const body = {
+      id: id,
+      password: password
+    }
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/password`, body);
   }
 }

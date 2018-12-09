@@ -121,13 +121,13 @@ export class DeleteMapDialog {
       .subscribe(
         data => {
           this.snackBar.open(this.data.mapName + " delete successfully!", "OK", {
-            duration: 5000
+            duration: 4000
           });
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error.error, "OK", {
-            duration: 5000
+            duration: 4000
           });
         });
   }
@@ -169,13 +169,13 @@ export class CreateMapDialog {
           this.loading = false;
           this.router.navigate(['/map/' + data]);
           this.snackBar.open(this.data.mapName + " created successfully!", "OK", {
-            duration: 5000
+            duration: 4000
           });
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error.error, "OK", {
-            duration: 5000
+            duration: 4000
           });
         });
   }

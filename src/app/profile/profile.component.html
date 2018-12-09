@@ -1,7 +1,7 @@
 <app-nav></app-nav>
 <div class="container basic-container">
   <mat-tab-group mat-stretch-tabs class="profile-stretched-tabs mat-elevation-z4">
-    <mat-tab label="personal info">
+    <mat-tab label="Personal Info">
       <mat-card class="padding-0 mat-elevation-z0">
         <mat-card-header class="profile-backgound" (mouseenter)="onBgEnter($event)" (mouseleave)="onBgLeave($event)">
           <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button">
@@ -24,64 +24,98 @@
       </mat-card>
 
       <mat-grid-list cols="2" rowHeight="9:4">
+        <!--Email tile-->
         <mat-grid-tile>
-          <mat-card class="profile-card mat-elevation-z4">
-            <mat-card-header class="update-header">
-              Change Email
-              <button mat-icon-button class="update-btn" type="button" matTooltip="update email" *ngIf="isEmailChanged" (click)="updateEmail(email.value)">
-                <mat-icon>update</mat-icon>
-              </button>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-form-field class="example-full-width">
-                  <!-- [ngModelOptions]="{standalone: true}" -->
-                <input matInput email #email placeholder="Email" [ngModel]="currentUser.email" (ngModelChange)="emailChanged($event)">
-              </mat-form-field>
-            </mat-card-content>
-          </mat-card>
+          <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
+            <mat-card class="profile-card mat-elevation-z4">
+              <mat-card-header class="update-header">
+                Change Email
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="update email" *ngIf="emailForm.valid && isEmailChanged">
+                  <mat-icon>update</mat-icon>
+                </button>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Email" formControlName="email">
+                  <mat-error *ngIf="emailForm.controls['email'].errors?.email">Email should be typed in right format.</mat-error>
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </form>
         </mat-grid-tile>
 
-        <mat-grid-tile>
-          <mat-card class="profile-card mat-elevation-z4">
-            <mat-card-header class="update-header">
-              Change Name
-              <button mat-icon-button class="update-btn" type="button" matTooltip="update name" *ngIf="isNameChanged">
-                <mat-icon>update</mat-icon>
-              </button>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Firstname" [ngModel]="currentUser.firstname" (ngModelChange)="firstnameChanged($event)">
-              </mat-form-field>
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Lastname" [ngModel]="currentUser.lastname" (ngModelChange)="lastnameChanged($event)">
-              </mat-form-field>
-            </mat-card-content>
-          </mat-card>
+        <!--Password tile-->
+        <mat-grid-tile *ngIf="!isConfirmed">
+          <form [formGroup]="passwordForm" (ngSubmit)="confirmPassword()">
+            <mat-card class="profile-card mat-elevation-z4">
+              <mat-card-header class="update-header">
+                Change Password
+                <button mat-icon-button class="update-btn" type="button" matTooltip="confirm">
+                  <mat-icon>arrow_right_alt</mat-icon>
+                </button>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </form>
         </mat-grid-tile>
 
+        <!--Confirm Password tile-->
+        <mat-grid-tile *ngIf="isConfirmed">
+          <form [formGroup]="confirmPasswordForm" (ngSubmit)="onUpdatePassword()">
+            <mat-card class="profile-card mat-elevation-z4">
+              <mat-card-header class="update-header">
+                Change Password
+                <button mat-icon-button class="update-btn" type="button" matTooltip="change password" *ngIf="confirmPasswordForm.valid">
+                  <mat-icon>update</mat-icon>
+                </button>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="New Password" formControlName="newPassword" [type]="hide ? 'password' : 'text'">
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Confirm Password" formControlName="confirmNewPassword" [type]="hide ? 'password' : 'text'">
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </form>
+        </mat-grid-tile>
+
+        <!--Name tile-->
         <mat-grid-tile>
-          <mat-card class="profile-card mat-elevation-z4">
-            <mat-card-header class="update-header">
-              Change Password
-              <button mat-icon-button class="update-btn" type="button" matTooltip="change password">
-                <mat-icon>update</mat-icon>
-              </button>
-            </mat-card-header>
-            <mat-card-content>
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'">
-                <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </mat-form-field>
-            </mat-card-content>
-          </mat-card>
+          <form [formGroup]="nameForm" (ngSubmit)="onUpdateName()">
+            <mat-card class="profile-card mat-elevation-z4">
+              <mat-card-header class="update-header">
+                Change Name
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="update name" *ngIf="nameForm.valid && isNameChanged">
+                  <mat-icon>update</mat-icon>
+                </button>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Firstname" formControlName="firstname">
+                </mat-form-field>
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Lastname" formControlName="lastname">
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </form>
         </mat-grid-tile>
 
         <mat-grid-tile>4</mat-grid-tile>
       </mat-grid-list>
 
     </mat-tab>
-    <mat-tab label="Second"> Content 2 </mat-tab>
-    <mat-tab label="Third"> Content 3 </mat-tab>
+    <mat-tab label="Personal Setting"> Personal Setting </mat-tab>
+    <mat-tab label="Close Account"> Close Account </mat-tab>
   </mat-tab-group>
 </div>

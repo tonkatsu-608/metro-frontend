@@ -45,7 +45,20 @@ export class UserService {
     return this.http.delete(this.rootUrl + `/metro/api/v1/m/delete/` + id);
   }
 
-  updateUser(user: User) {
-    return this.http.put(this.rootUrl + `/metro/api/v1/u/update`, user);
+  updateEmail(email: string, id: string) {
+    const body = {
+      id: id,
+      email: email
+    }
+    return this.http.put(this.rootUrl + `/metro/api/v1/u/update/email`, body);
+  }
+
+  updateName(firstname: string, lastname: string, id: string) {
+    const body = {
+      id: id,
+      firstname: firstname,
+      lastname: lastname
+    }
+    return this.http.put(this.rootUrl + `/metro/api/v1/u/update/name`, body);
   }
 }

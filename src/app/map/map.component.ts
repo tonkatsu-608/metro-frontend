@@ -51,7 +51,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           error => {
             this.loading = false;
             this.snackBar.open(error.error.error, "OK", {
-              duration: 5000
+              duration: 4000
             });
           });
     });
@@ -73,13 +73,13 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           this.loading = false;
           this.isSave = true;
           this.snackBar.open("Save successfully!", "OK", {
-            duration: 5000
+            duration: 4000
           });
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error.error, "OK", {
-            duration: 5000
+            duration: 4000
           });
         });
   }

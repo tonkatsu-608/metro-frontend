@@ -76,14 +76,14 @@ export class SignupComponent implements OnInit, OnDestroy {
         data => {
           this.router.navigate(['/login']).then(() => {
             this.snackBar.open("Sign up successfully!", "OK", {
-              duration: 5000
+              duration: 4000
             });
           });
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error, "OK", {
-            duration: 5000
+            duration: 4000
           });
         });
   }

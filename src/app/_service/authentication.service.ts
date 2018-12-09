@@ -40,4 +40,11 @@ export class AuthenticationService {
     this.currentUserSubject.next(null);
     return this.http.post<any>('http://localhost:3000/metro/api/v1/logout', null);
   }
+
+  updateLocalStoragelUser(user) {
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
+    localStorage.setItem('currentUser', JSON.stringify(user));
+    this.currentUserSubject.next(user);
+  }
 }

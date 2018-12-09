@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, FormBuilder, Validators, Form } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
@@ -13,37 +14,45 @@ import { AuthenticationService } from '../_service/authentication.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  isEnter: boolean = false;
-  isBgEnter: boolean = false;
   hide: boolean = true;
   loading: boolean = false;
+  isEnter: boolean = false;
+  isBgEnter: boolean = false;
   submitted: boolean = false;
   isEmailChanged: boolean = false;
   isNameChanged: boolean = false;
-
-  email: string;
-  firstname: string;
-  lastname: string;
-  password: string;
-  currentUser: User;
+  isConfirmed:boolean = false;
+  currentUser: any;
   currentUserSubscription: Subscription;
-
-  emailForm: FormGroup
+  emailForm: FormGroup;
+  nameForm: FormGroup;
+  passwordForm: FormGroup;
+  confirmPasswordForm: FormGroup;
 
   constructor(
     private router: Router,
     private formBuilder: FormBuilder,
     private userService: UserService,
     private authenticationService: AuthenticationService,
-    public snackBar: MatSnackBar) { 
-      this.emailForm = this.formBuilder.group({
-        email: new FormControl('', [Validators.required, Validators.email])
-      });
-    }
+    public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
       this.currentUser = user;
+    });
+    this.emailForm = this.formBuilder.group({
+      email: new FormControl(this.currentUser.email, [Validators.email, this.ValidateEmail(this.currentUser.email)])
+    });
+    this.nameForm = this.formBuilder.group({
+      firstname: new FormControl(this.currentUser.firstname, [this.ValidateFirstname(this.currentUser.firstname)]),
+      lastname: new FormControl(this.currentUser.lastname, [this.ValidateLastname(this.currentUser.lastname)])
+    });
+    this.passwordForm = this.formBuilder.group({
+      password: new FormControl('', [Validators.minLength(3), Validators.required]),
+    });
+    this.confirmPasswordForm = this.formBuilder.group({
+      newPassword: new FormControl('', [Validators.minLength(3), Validators.required]),
+      confirmNewPassword: new FormControl('', [Validators.minLength(3), Validators.required]),
     });
   }
 
@@ -52,51 +61,82 @@ export class ProfileComponent implements OnInit {
     this.currentUserSubscription.unsubscribe();
   }
 
-  updateEmail(email) {
-    console.log(email)
-    let user = new User();
-    this.userService.updateUser(user)
+  onUpdateEmail() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.emailForm.invalid || !this.isEmailChanged) {
+      return;
+    }
+    this.userService.updateEmail(this.emailForm.value.email, this.currentUser.id)
       .subscribe(
         data => {
-          this.router.navigate(['/login']).then(() => {
-            this.snackBar.open("Sign up successfully!", "OK", {
-              duration: 5000
-            });
+          this.authenticationService.updateLocalStoragelUser(data);
+          this.ngOnInit();
+          this.snackBar.open("Email updated successfully!", "OK", {
+            duration: 4000
           });
         },
         error => {
           this.loading = false;
-          this.snackBar.open(error.error, "OK", {
-            duration: 5000
+          this.snackBar.open(error.error.msg, "OK", {
+            duration: 4000
           });
         });
   }
-  
-  emailChanged(email) {
-    if(email === this.currentUser.email || email === "" || !email.includes('@')) {
-      this.isEmailChanged = false;
-    } else {
-      this.isEmailChanged = true;
-      this.email = email;
+
+  onUpdateName() {
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.nameForm.invalid || !this.isNameChanged) {
+      return;
     }
-    console.log(this.email)
+    this.userService.updateName(this.nameForm.value.firstname, this.nameForm.value.lastname, this.currentUser.id)
+      .subscribe(
+        data => {
+          this.authenticationService.updateLocalStoragelUser(data);
+          this.ngOnInit();
+          this.snackBar.open("Name updated successfully!", "OK", {
+            duration: 4000
+          });
+        },
+        error => {
+          this.loading = false;
+          this.snackBar.open(error.error.msg, "OK", {
+            duration: 4000
+          });
+        });
   }
 
-  firstnameChanged(firstname) {
-    if(firstname === this.currentUser.firstname || firstname === "") {
-      this.isNameChanged = false;
-    } else {
-      this.isNameChanged = true;
-      this.firstname = firstname;
+  ValidateEmail(email: string) {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value === email || control.value === "") {
+        this.isEmailChanged = false;
+      } else {
+        this.isEmailChanged = true;
+      }
+      return null;
     }
   }
 
-  lastnameChanged(lastname) {
-    if(lastname === this.currentUser.lastname || lastname === "") {
-      this.isNameChanged = false;
-    } else {
-      this.isNameChanged = true;
-      this.lastname = lastname;
+  ValidateFirstname(name: string) {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value === name || control.value === "") {
+        this.isNameChanged = false;
+      } else {
+        this.isNameChanged = true;
+      }
+      return null;
+    }
+  }
+
+  ValidateLastname(name: string) {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value === name || control.value === "") {
+        this.isNameChanged = false;
+      } else {
+        this.isNameChanged = true;
+      }
+      return null;
     }
   }
 

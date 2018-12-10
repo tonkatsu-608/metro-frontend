@@ -45,6 +45,14 @@ export class UserService {
     return this.http.delete(this.rootUrl + `/metro/api/v1/m/delete/` + id);
   }
 
+  verifyPassword(password: string, id: string) {
+    const body = {
+      id: id,
+      password: password
+    }
+    return this.http.patch(this.rootUrl + `/metro/api/v1/u/verify/password`, body);
+  }
+
   updateEmail(email: string, id: string) {
     const body = {
       id: id,
@@ -62,19 +70,15 @@ export class UserService {
     return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/name`, body);
   }
 
-  verifyPassword(password: string, id: string) {
-    const body = {
-      id: id,
-      password: password
-    }
-    return this.http.patch(this.rootUrl + `/metro/api/v1/u/verify/password`, body);
-  }
-
   updatePassword(password: string, id: string) {
     const body = {
       id: id,
       password: password
     }
     return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/password`, body);
+  }
+
+  blockUser(user: User) {
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/enabled`, user);
   }
 }

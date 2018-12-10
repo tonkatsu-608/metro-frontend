@@ -1,4 +1,4 @@
-<mat-progress-bar *ngIf="loading" color="primary" mode="indeterminate"></mat-progress-bar>
+<mat-progress-bar *ngIf="loading" color="accent" mode="indeterminate"></mat-progress-bar>
 
 <div class="signup-container">
   <mat-card class="signup-card">
@@ -34,20 +34,20 @@
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
           <mat-form-field class="form-field">
             <input formControlName="password" matInput required placeholder="Password" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             <mat-error *ngIf="signUpForm.controls['password'].errors?.required">Password is required.</mat-error>
             <mat-error *ngIf="signUpForm.controls['password'].errors?.minLength">Minimum 3 characters needed.</mat-error>
           </mat-form-field>
         </mat-grid-tile>
 
-        <mat-grid-tile [colspan]="1" [rowspan]="1">
+        <mat-grid-tile [colspan]="2" [rowspan]="1">
           <mat-form-field class="form-field">
-            <input formControlName="confirmPassword" matInput required placeholder="Confirm" [type]="hide ? 'password' : 'text'">
+            <input formControlName="confirmPassword" matInput required placeholder="Confirm password" [type]="hide ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher">
             <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-            <mat-error *ngIf="signUpForm.controls['confirmPassword'].errors?.required">Confirm password is required.</mat-error>
-            <mat-error *ngIf="signUpForm.controls['confirmPassword'].errors?.minLength">Minimum 3 characters needed.</mat-error>
+            <mat-error *ngIf="signUpForm.hasError('notSame')">Passwords do not match</mat-error>
           </mat-form-field>
         </mat-grid-tile>
       </mat-grid-list>
@@ -58,7 +58,6 @@
       <mat-card-actions>
         <a mat-raised-button color="warn" (click)="onClear()">Clear</a>
         <button mat-raised-button color="primary" [disabled]="signUpForm.invalid || loading" type="submit">Sign up</button>
-        <!-- <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" /> -->
       </mat-card-actions>
     </form>
 

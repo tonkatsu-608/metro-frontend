@@ -15,7 +15,6 @@ import { AuthenticationService } from '../_service/authentication.service';
 export class LoginComponent implements OnInit, OnDestroy {
   hide = true;
   loading = false;
-  submitted = false;
   returnUrl: string;
   loginForm: FormGroup;
   currentUser: User;
@@ -56,13 +55,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-    this.submitted = true;
-
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
-
     this.loading = true;
     // this.userService.login(this.loginForm.value)
     this.authenticationService.login(this.f.email.value, this.f.password.value)
@@ -79,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/login']).then(() => {
             if(error) {
               this.snackBar.open(error.error.msg, "OK", {
-                duration: 4000
+                duration: 5000
               });
             }
           });;

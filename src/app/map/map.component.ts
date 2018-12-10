@@ -20,7 +20,6 @@ declare const Metro: any;
 })
 export class MapComponent implements OnInit, ComponentCanDeactivate {
   loading = false;
-  submitted = false;
   metro: any;
   mode: string;
   isSave: boolean;

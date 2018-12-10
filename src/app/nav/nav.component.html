@@ -15,7 +15,7 @@
     </button>
 
     <mat-menu #menu="matMenu">
-      <mat-card>
+      <mat-card *ngIf="currentUser">
         <mat-card-header class="sidenav-card-hrader">
           <div mat-card-avatar class="example-header-image"></div>
           <mat-card-title class="sidenax-card-title">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>

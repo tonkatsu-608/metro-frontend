@@ -1,12 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
 import { AuthenticationService } from '../_service/authentication.service';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-signup',
@@ -16,10 +25,10 @@ import { AuthenticationService } from '../_service/authentication.service';
 export class SignupComponent implements OnInit, OnDestroy {
   hide = true;
   loading = false;
-  submitted = false;
   signUpForm: FormGroup;
   currentUser: User;
   currentUserSubscription: Subscription;
+  passwordMatcher = new MyErrorStateMatcher();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,7 +52,8 @@ export class SignupComponent implements OnInit, OnDestroy {
       lastname: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.minLength(3), Validators.required]),
       confirmPassword: new FormControl('', [Validators.minLength(3), Validators.required]),
-    });
+    },
+      { validator: this.ValidatePassword });
   }
 
   ngOnDestroy() {
@@ -64,7 +74,6 @@ export class SignupComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.submitted = true;
     // stop here if form is invalid
     if (this.signUpForm.invalid) {
       return;
@@ -82,9 +91,16 @@ export class SignupComponent implements OnInit, OnDestroy {
         },
         error => {
           this.loading = false;
-          this.snackBar.open(error.error, "OK", {
+          this.snackBar.open(error.error.msg, "OK", {
             duration: 4000
           });
         });
+  }
+
+  ValidatePassword(group: FormGroup) {
+    let password = group.controls.password.value;
+    let confirmPassword = group.controls.confirmPassword.value;
+
+    return confirmPassword === password ? null : { 'notSame': true }
   }
 }

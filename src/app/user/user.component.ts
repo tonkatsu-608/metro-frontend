@@ -92,7 +92,6 @@ export class UserComponent implements OnInit, OnDestroy {
       this.dataSource.sort = this.sort;
     });
   }
-
 }
 
 /*=====================================================================================================

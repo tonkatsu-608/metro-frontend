@@ -5,7 +5,8 @@
   <mat-tab-group mat-stretch-tabs class="profile-stretched-tabs mat-elevation-z4">
     <mat-tab label="Personal Info">
       <mat-card class="padding-0 mat-elevation-z0">
-        <mat-card-header class="profile-backgound" (mouseenter)="isBgEnter = true" (mouseleave)="isBgEnter = false">
+        <mat-card-header class="profile-backgound" [ngStyle]="{'background-image': getBackground()}" (mouseenter)="isBgEnter = true"
+          (mouseleave)="isBgEnter = false">
           <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button">
             <mat-icon>camera_alt</mat-icon>
           </button>
@@ -16,13 +17,14 @@
             <button mat-icon-button class="mat-elevation-z1 avatar-camera-btn" *ngIf="isEnter" type="button">
               <mat-icon>camera_alt</mat-icon>
             </button>
-            <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba1.jpg" class="avatar mat-elevation-z2" />
+            <img mat-card-avatar src="assets/images/avatar-0.jpg" class="avatar mat-elevation-z2" />
           </div>
           <!-- <button mat-icon-button class="mat-elevation-z0 edit-btn">
               <mat-icon>edit</mat-icon>
             </button> -->
         </mat-card-header>
-        <mat-card-title class="profile-username center" *ngIf="currentUser">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
+        <mat-card-title class="profile-username center" *ngIf="currentUser">{{currentUser.firstname}}
+          {{currentUser.lastname}}</mat-card-title>
       </mat-card>
 
       <mat-grid-list cols="2" rowHeight="9:4">
@@ -145,27 +147,43 @@
     </mat-tab>
 
     <mat-tab label="Preferences">
-      <mat-grid-list cols="2" rowHeight="9:4">
-        <!--Email tile-->
-        <mat-grid-tile>
-          <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
+      <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
+        <mat-grid-list cols="2" rowHeight="9:4">
+
+          <!--Date tile-->
+          <mat-grid-tile>
             <mat-card class="profile-card mat-elevation-z4">
-              <mat-card-header class="update-header">
-                Change Email
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="update email" *ngIf="emailForm.valid && isEmailChanged">
-                  <mat-icon>refresh</mat-icon>
-                </button>
-              </mat-card-header>
+              <mat-card-header class="update-header">Date Format</mat-card-header>
               <mat-card-content>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Email" formControlName="email">
-                  <mat-error *ngIf="emailForm.controls['email'].errors?.email">Email should be typed in right format.</mat-error>
+                  <mat-select placeholder="Date format">
+                    <mat-option value="YYYY-MM-DD">YYYY-MM-DD</mat-option>
+                    <mat-option value="MM-DD-YYYY">MM-DD-YYYY</mat-option>
+                  </mat-select>
                 </mat-form-field>
               </mat-card-content>
             </mat-card>
-          </form>
-        </mat-grid-tile>
-      </mat-grid-list>
+          </mat-grid-tile>
+
+          <!--Map display tile-->
+          <mat-grid-tile>
+            <mat-card class="profile-card mat-elevation-z4">
+              <mat-card-header class="update-header">Map display mode</mat-card-header>
+              <mat-card-content>
+                <mat-form-field class="example-full-width">
+                  <mat-select placeholder="Map display">
+                    <mat-option value="list">list</mat-option>
+                    <mat-option value="thumbnail">thumbnail</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+        <button mat-raised-button class="setting-btn" type="button" disabled color="primary">Save</button>
+      </form>
+
     </mat-tab>
   </mat-tab-group>
 </div>

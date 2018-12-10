@@ -119,6 +119,7 @@ export class DeleteMapDialog {
     this.userService.deleteMap(this.data.id)
       .subscribe(
         data => {
+          this.loading = false;
           this.snackBar.open(this.data.mapName + " delete successfully!", "OK", {
             duration: 4000
           });

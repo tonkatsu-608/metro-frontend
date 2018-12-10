@@ -90,6 +90,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.updateEmail(this.emailForm.value.email, this.currentUser.id)
       .subscribe(
         (data: User) => {
+          this.loading = false;
           this.authenticationService.updateLocalStoragelUser(data);
           this.ngOnInit();
           this.snackBar.open("Email updated successfully!", "OK", {
@@ -228,6 +229,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       width: '320px',
       data: { user: this.currentUser }
     });
+  }
+
+  getBackground() {
+    return 'url(assets/images/bg-0.jpg)';
+    // return 'url(https://material.angular.io/assets/img/examples/shiba1.jpg)';
   }
 }
 /*=====================================================================================================

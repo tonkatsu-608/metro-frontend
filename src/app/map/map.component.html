@@ -3,11 +3,45 @@
 
 <mat-sidenav-container class="example-container">
   <mat-sidenav #sidenav mode="side" opened>
-    Archieved
+    <mat-list>
+        <h2 mat-subheader>render new map</h2>
+        <mat-list-item>
+          <mat-form-field class="sites-field">
+            <input id="sites" matInput placeholder="sites" type="number" [(ngModel)]="sites">
+          </mat-form-field>
+          <button class="render-btn" mat-raised-button color="primary" matTooltip="Render" (click)="newGraphics(sites)">Render</button>
+        </mat-list-item>
+    </mat-list>
+    <mat-divider></mat-divider>
+    <mat-list>
+        <h2 mat-subheader>settings</h2>
+        <mat-list-item> 
+            <mat-slide-toggle id="simulateSwitch" color="primary" [(ngModel)]="isSimulatingSelected" (change)="changeSimulating()">simulating</mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item> 
+            <mat-slide-toggle id="singleSwitch" color="primary" [(ngModel)]="isSingleSelected" (change)="changeSingle()">single</mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item> 
+            <mat-slide-toggle id="warpSwitch" color="primary" [(ngModel)]="isWarpSelected" (change)="changeWarp()">warp</mat-slide-toggle>
+        </mat-list-item>
+        <mat-list-item> 
+            <label for="distance">distance:</label>
+            <mat-slider id="distance" thumbLabel tickInterval="10" min="0" max="300" color="primary" aria-label="distance" [(ngModel)]="distance" (change)="changeEdges()"></mat-slider>
+        </mat-list-item>
+        <mat-list-item> 
+            <label for="segment">segment:</label>
+            <mat-slider id="segment" thumbLabel tickInterval="1" min="0" max="100"  color="primary" aria-label="segment" [(ngModel)]="segment" (change)="changeEdges()"></mat-slider>
+        </mat-list-item>
+        <!-- <mat-list-item>
+          <button mat-raised-button color="primary" matTooltip="Warp Mode" id="startWarp">Warp</button>
+          <button mat-raised-button color="warn" matTooltip="Warp Mode" id="stopWarp" hide>Stop Warp</button>
+        </mat-list-item> -->
+    </mat-list>
   </mat-sidenav>
+  
   <mat-sidenav-content>
     <div class="dashboard-container" [style.backgroundColor]="'#CBC5B9'">
-      <canvas id="myCanvas" width="1420" height="920">
+      <canvas id="myCanvas" width="1190" height="920">
         Your browser does not support canvas
       </canvas>
     </div>

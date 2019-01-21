@@ -19,6 +19,12 @@ declare const Metro: any;
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, ComponentCanDeactivate {
+  sites = 30;
+  segment = 20;
+  distance = 150;
+  isSimulatingSelected = false;
+  isSingleSelected = false;
+  isWarpSelected = false;
   loading = false;
   metro: any;
   mode: string;
@@ -41,10 +47,10 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           data => {
             this.currentMap = data;
             this.canvas = d3.select("#myCanvas").node();
-            if(data.sites.length === 0 && data.clusters.length === 0) {
-              this.metro = new Metro(this.canvas);
+            if(data.graphics !== null) {
+              this.metro = new Metro(this.canvas, data.graphics);
             } else {
-              this.metro = new Metro(this.canvas, data.sites, data.clusters);
+              this.metro = new Metro(this.canvas);
             }
           },
           error => {
@@ -63,8 +69,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
-    map.sites = this.metro.graphics.sites;
-    map.clusters = this.metro.graphics.clusters;
+    map.graphics = this.metro.graphics;
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     this.userService.saveMap(map)
       .subscribe(
@@ -81,6 +86,38 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             duration: 4000
           });
         });
+  }
+
+  newGraphics(sites) {
+    this.metro.newGraphics(sites);
+  }
+
+  changeSimulating() {
+    if(this.isSimulatingSelected) {
+      this.metro.restartSimulations();
+    } else {
+      this.metro.stopSimulations();
+    }
+  }
+
+  changeSingle() {
+    if(this.isSingleSelected) {
+      this.metro.startSingleDragMode();
+    } else {
+      this.metro.stopSingleDragMode();
+    }
+  }
+
+  changeWarp() {
+    if(this.isWarpSelected) {
+      this.metro.startWarpMode();
+    } else {
+      this.metro.stopWarpMode();
+    }
+  }
+
+  changeEdges() {
+    this.metro.tick(this.distance, this.segment);
   }
 
   // @HostListener allows us to also guard against browser refresh, close, etc.

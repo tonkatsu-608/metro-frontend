@@ -1,20 +1,21 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <a class="menu-btn" matTooltip="Menu">
-      <mat-icon class="example-icon" (click)="sidenav.toggle()">menu</mat-icon>
-    </a>
+    <button class="nav-btn" mat-icon-button [routerLink]="['/dashboard']" matTooltip="Back">
+      <mat-icon class="back-icon pointer">reply</mat-icon>
+    </button>
     <span class="nav-img">
       <img src="assets/images/metropolist.png" alt="Metropolist" width="282"
         height="40">
     </span>
+    <!-- <span>{{currentMap.name}}</span> -->
     <span class="example-spacer"></span>
 
     <button class="nav-btn" mat-raised-button [routerLink]="['/dashboard']" matTooltip="Dashboard">
-      <mat-icon class="example-icon">dashboard</mat-icon>
+      <mat-icon class="nav-icon pointer">dashboard</mat-icon>
     </button>
 
     <button class="nav-btn" mat-raised-button>
-      <mat-icon class="example-icon" [matMenuTriggerFor]="menu">person</mat-icon>
+      <mat-icon class="nav-icon pointer" [matMenuTriggerFor]="menu">person</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu">

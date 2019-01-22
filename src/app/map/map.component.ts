@@ -117,7 +117,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   changeEdges() {
-    this.metro.tick(this.distance, this.segment);
+    this.metro.changeEdges(this.distance, this.segment);
   }
 
   // @HostListener allows us to also guard against browser refresh, close, etc.

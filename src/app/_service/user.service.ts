@@ -26,23 +26,23 @@ export class UserService {
   }
 
   getMaps(uid: string) {
-    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/${uid}/maps/`);
+    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/user/${uid}/maps/`);
   }
 
   getMap(id: string) {
-    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/m/` + id);
+    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
   }
 
   createMap(map: Map) {
-    return this.http.post(this.rootUrl + `/metro/api/v1/m/create`, map);
+    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
   }
 
   saveMap(map: Map) {
-    return this.http.put(this.rootUrl + `/metro/api/v1/m/update`, map);
+    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
   }
 
   deleteMap(id: string) {
-    return this.http.delete(this.rootUrl + `/metro/api/v1/m/delete/` + id);
+    return this.http.delete(this.rootUrl + `/metro/api/v1/map/delete/` + id);
   }
 
   verifyPassword(password: string, id: string) {
@@ -50,7 +50,7 @@ export class UserService {
       id: id,
       password: password
     }
-    return this.http.patch(this.rootUrl + `/metro/api/v1/u/verify/password`, body);
+    return this.http.patch(this.rootUrl + `/metro/api/v1/user/verify/password`, body);
   }
 
   updateEmail(email: string, id: string) {
@@ -58,7 +58,7 @@ export class UserService {
       id: id,
       email: email
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/email`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/email`, body);
   }
 
   updateName(firstname: string, lastname: string, id: string) {
@@ -67,7 +67,7 @@ export class UserService {
       firstname: firstname,
       lastname: lastname
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/name`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/name`, body);
   }
 
   updatePassword(password: string, id: string) {
@@ -75,10 +75,10 @@ export class UserService {
       id: id,
       password: password
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/password`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/password`, body);
   }
 
   blockUser(user: User) {
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/u/update/enabled`, user);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/enabled`, user);
   }
 }

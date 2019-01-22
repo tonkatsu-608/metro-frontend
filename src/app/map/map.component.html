@@ -26,11 +26,11 @@
         </mat-list-item>
         <mat-list-item> 
             <label for="distance">distance:</label>
-            <mat-slider id="distance" thumbLabel tickInterval="10" min="0" max="300" color="primary" aria-label="distance" [(ngModel)]="distance" (change)="changeEdges()"></mat-slider>
+            <mat-slider id="distance" thumbLabel tickInterval="30" min="0" max="300" color="primary" aria-label="distance" [(ngModel)]="distance" (change)="changeEdges()"></mat-slider>
         </mat-list-item>
         <mat-list-item> 
             <label for="segment">segment:</label>
-            <mat-slider id="segment" thumbLabel tickInterval="1" min="0" max="100"  color="primary" aria-label="segment" [(ngModel)]="segment" (change)="changeEdges()"></mat-slider>
+            <mat-slider id="segment" thumbLabel tickInterval="10" min="0" max="100"  color="primary" aria-label="segment" [(ngModel)]="segment" (change)="changeEdges()"></mat-slider>
         </mat-list-item>
         <!-- <mat-list-item>
           <button mat-raised-button color="primary" matTooltip="Warp Mode" id="startWarp">Warp</button>

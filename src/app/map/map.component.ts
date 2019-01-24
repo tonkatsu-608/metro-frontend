@@ -64,12 +64,13 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
   saveMap() {
     this.loading = true;
+
     let map = new Map();
     map.id = this.currentMap.id;
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
-    map.graphics = this.metro.graphics;
+    map.graphics = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     this.userService.saveMap(map)
       .subscribe(
@@ -87,6 +88,39 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           });
         });
   }
+
+  convertGraphics2Object(graphics) {
+    if(graphics.edges.length !== 0) {
+      graphics.edges = graphics.edges.map( this.makeEdge );
+    }
+    console.log("saving...", graphics);
+
+    return graphics;
+  }
+
+  makeEdge(e) {
+    let edge = {
+        startPoint: { x: e[0][0], y: e[0][1] },
+        endPoint: { x: e[1][0], y: e[1][1] },
+        left: {
+            x: e.left[0],
+            y: e.left[1],
+            index: e.left.index,
+            data: e.left.data
+        },
+        right: null,
+    }
+
+    if(e.right) {
+        edge.right = {
+            x: e.right[0],
+            y: e.right[1],
+            index: e.right.index,
+            data: e.right.data
+        };
+    }
+    return edge;
+}
 
   newGraphics(sites) {
     this.metro.newGraphics(sites);

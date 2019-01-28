@@ -47,8 +47,10 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           data => {
             this.currentMap = data;
             this.canvas = d3.select("#myCanvas").node();
-            if(data.graphics !== null) {
-              this.metro = new Metro(this.canvas, data.graphics);
+            if(data.data) {
+              // let processedEdges = this.processEdges( data.sites, data.vertices, data.edges );
+              // console.log( processedEdges );
+              this.metro = new Metro(this.canvas, data.data);
             } else {
               this.metro = new Metro(this.canvas);
             }
@@ -70,7 +72,8 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
-    map.graphics = this.convertGraphics2Object(this.metro.graphics);
+    map.data = this.convertGraphics2Object(this.metro.graphics);
+    // map.graphics = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     this.userService.saveMap(map)
       .subscribe(
@@ -90,37 +93,88 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   convertGraphics2Object(graphics) {
-    if(graphics.edges.length !== 0) {
-      graphics.edges = graphics.edges.map( this.makeEdge );
+    let data = {
+      segment: graphics.SEGMENT,
+      distance: graphics.DISTANCE,
+      sites: graphics.sites,
+      diagram: processDiagram(graphics.diagram),
+      edges: graphics.edges.map(makeEdge),
+      polygons: graphics.polygons,
+      clusters: graphics.clusters,
+      buildings: graphics.buildings,
+      vertices: graphics.vertices,
+    };
+    console.log("saving...", data);
+
+    return data;
+
+    function processDiagram(diagram) {
+      diagram.edges = diagram.edges.map( makeEdge );
+      diagram.cells = diagram.cells.map( cell => {
+          return {
+            halfedges: cell.halfedges,
+            site: {
+              x: cell.site[0],
+              y: cell.site[1],
+              index: cell.site.index,
+              data:  cell.site.data,
+            },
+          };
+        });
+      
+      return diagram;
     }
-    console.log("saving...", graphics);
 
-    return graphics;
-  }
-
-  makeEdge(e) {
-    let edge = {
-        startPoint: { x: e[0][0], y: e[0][1] },
-        endPoint: { x: e[1][0], y: e[1][1] },
-        left: {
-            x: e.left[0],
-            y: e.left[1],
-            index: e.left.index,
-            data: e.left.data
-        },
-        right: null,
-    }
-
-    if(e.right) {
-        edge.right = {
+    function makeEdge(e) {
+      let edge = {
+          startPoint: {
+            x: e[0][0],
+            y: e[0][1],
+            edgeIndex: e[0].edgeIndex,
+            vertexIndex: e[0].vertexIndex,
+          },
+          endPoint: {
+            x: e[1][0],
+            y: e[1][1],
+            edgeIndex: e[1].edgeIndex,
+            vertexIndex: e[1].vertexIndex,
+          },
+          left: {
+              x: e.left[0],
+              y: e.left[1],
+              index: e.left.index,
+          },
+          right: e.right ? {
             x: e.right[0],
             y: e.right[1],
             index: e.right.index,
-            data: e.right.data
-        };
+          } : null,
+      }
+      return edge;
+  
+      // if(e[0].vertexIndex && e[0].edgeIndex) {
+      //   edge.startPoint = { x: vertices[ e[0].vertexIndex ][0], y: vertices[ e[0].vertexIndex ][1], vertexIndex: e[0].vertexIndex, edgeIndex: e[0].edgeIndex };
+      // } else {
+      //   edge.startPoint = { x: e[0][0], y: e[0][1] }; 
+      // }
+  
+      // if(e[1].vertexIndex && e[1].edgeIndex) {
+      //   edge.endPoint = { x: vertices[ e[1].vertexIndex ][0], y: vertices[ e[1].vertexIndex ][1], vertexIndex: e[1].vertexIndex, edgeIndex: e[1].edgeIndex }; 
+      // } else {
+      //   edge.endPoint = { x: e[1][0], y: e[1][1] }; 
+      // }
     }
-    return edge;
-}
+  }
+
+  processEdges( sites, vertices, edges ) {
+    return edges.map( e => {
+      console.log(e);
+      let result : any = [ vertices[ e[0][2] ], vertices[ e[1][2]] ];
+      result.left = sites[ e.left.index ];
+      result.right = sites[ e.right.index ];
+      return result;
+    })
+  }
 
   newGraphics(sites) {
     this.metro.newGraphics(sites);

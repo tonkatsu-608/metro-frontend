@@ -46,8 +46,8 @@
       </canvas>
     </div>
     <div class="example-button-row">
-      <button mat-fab class="create-btn" color="primary" matTooltip="Save Map" (click)="saveMap()">
-        <mat-icon *ngIf="!loading" aria-label="create a map">save</mat-icon>
+      <button mat-fab class="create-btn" color="primary" matTooltip="Save Map" (click)="saveMap()" [disabled]="loading">
+        <mat-icon aria-label="create a map">save</mat-icon>
       </button>
     </div>
   </mat-sidenav-content>

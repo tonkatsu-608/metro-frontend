@@ -3,7 +3,14 @@ export class Map {
   uid: string;
   name: string;
   img: any;
-  graphics: any;
+  data: any;
   createDate: string;
   editDate: string;
+  // segment: number;
+  // distance: number;
+  // sites: Array<any>;
+  // edges: Array<any>;
+  // polygons: Array<any>;
+  // clusters: Array<any>;
+  // vertices: Array<any>;
 }

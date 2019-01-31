@@ -48,8 +48,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             this.currentMap = data;
             this.canvas = d3.select("#myCanvas").node();
             if(data.data) {
-              // let processedEdges = this.processEdges( data.sites, data.vertices, data.edges );
-              // console.log( processedEdges );
               this.metro = new Metro(this.canvas, data.data);
             } else {
               this.metro = new Metro(this.canvas);
@@ -73,7 +71,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
     map.data = this.convertGraphics2Object(this.metro.graphics);
-    // map.graphics = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     this.userService.saveMap(map)
       .subscribe(
@@ -98,18 +95,19 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       distance: graphics.DISTANCE,
       sites: graphics.sites,
       diagram: processDiagram(graphics.diagram),
-      edges: graphics.edges.map(makeEdge),
+      links: graphics.links,
+      edges: graphics.edges.map( processEdge ),
       polygons: graphics.polygons,
       clusters: graphics.clusters,
       buildings: graphics.buildings,
-      vertices: graphics.vertices,
+      vertices: graphics.vertices.map( processVertex ),
     };
     console.log("saving...", data);
 
     return data;
 
     function processDiagram(diagram) {
-      diagram.edges = diagram.edges.map( makeEdge );
+      diagram.edges = diagram.edges.map( processEdge );
       diagram.cells = diagram.cells.map( cell => {
           return {
             halfedges: cell.halfedges,
@@ -125,55 +123,41 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       return diagram;
     }
 
-    function makeEdge(e) {
-      let edge = {
-          startPoint: {
-            x: e[0][0],
-            y: e[0][1],
-            edgeIndex: e[0].edgeIndex,
+    function processEdge(e) {
+      if(e === null || e === undefined) return;
+
+      return {
+          startPoint: 
+          {
             vertexIndex: e[0].vertexIndex,
+            edgeIndex: e[0].edgeIndex,
           },
-          endPoint: {
-            x: e[1][0],
-            y: e[1][1],
-            edgeIndex: e[1].edgeIndex,
+          endPoint: 
+          {
             vertexIndex: e[1].vertexIndex,
+            edgeIndex: e[1].edgeIndex,
           },
           left: {
-              x: e.left[0],
-              y: e.left[1],
+              x: graphics.sites[ e.left.index ][0],
+              y: graphics.sites[ e.left.index ][1],
               index: e.left.index,
           },
           right: e.right ? {
-            x: e.right[0],
-            y: e.right[1],
+            x: graphics.sites[ e.right.index ][0],
+            y: graphics.sites[ e.right.index ][1],
             index: e.right.index,
           } : null,
       }
-      return edge;
-  
-      // if(e[0].vertexIndex && e[0].edgeIndex) {
-      //   edge.startPoint = { x: vertices[ e[0].vertexIndex ][0], y: vertices[ e[0].vertexIndex ][1], vertexIndex: e[0].vertexIndex, edgeIndex: e[0].edgeIndex };
-      // } else {
-      //   edge.startPoint = { x: e[0][0], y: e[0][1] }; 
-      // }
-  
-      // if(e[1].vertexIndex && e[1].edgeIndex) {
-      //   edge.endPoint = { x: vertices[ e[1].vertexIndex ][0], y: vertices[ e[1].vertexIndex ][1], vertexIndex: e[1].vertexIndex, edgeIndex: e[1].edgeIndex }; 
-      // } else {
-      //   edge.endPoint = { x: e[1][0], y: e[1][1] }; 
-      // }
     }
-  }
 
-  processEdges( sites, vertices, edges ) {
-    return edges.map( e => {
-      console.log(e);
-      let result : any = [ vertices[ e[0][2] ], vertices[ e[1][2]] ];
-      result.left = sites[ e.left.index ];
-      result.right = sites[ e.right.index ];
-      return result;
-    })
+    function processVertex(v) {
+      return {
+        x: v[0],
+        y: v[1],
+        edgeIndex: v.edgeIndex,
+        vertexIndex: v.vertexIndex,
+      };
+    }
   }
 
   newGraphics(sites) {
@@ -198,6 +182,9 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
   changeWarp() {
     if(this.isWarpSelected) {
+      this.isSingleSelected = false;
+      this.isSimulatingSelected = false;
+      this.metro.stopSingleDragMode();
       this.metro.startWarpMode();
     } else {
       this.metro.stopWarpMode();

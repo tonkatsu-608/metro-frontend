@@ -18,10 +18,62 @@ mat-progress-bar {
   top: 0;
 }
 
+table {
+  width: 100%;
+}
+
+.mat-table {
+  display: block;
+  padding: 0 20px;
+}
+
+.mat-row,
+.mat-header-row {
+  display: flex;
+  border-bottom-width: 1px;
+  border-bottom-style: dashed;
+  align-items: center;
+  min-height: 48px;
+  padding: 0px -10px;
+}
+
+.mat-cell,
+.mat-header-cell {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  display: table-cell;
+  word-wrap: break-word;
+  vertical-align: middle;
+}
+
 .sites-field {
   width: 100px;
 }
 
 .render-btn {
   margin-left: 10px;
+}
+
+.dashboard-container {
+  position: relative;
+}
+
+canvas {
+  width: 100%;
+}
+
+#myCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background-color: rgb(203, 197, 185);
+}
+
+#cursorCanvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 0;
 }

@@ -1,12 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'materialize.css';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 // deeppurple-amber.css
 // indigo-pink.css
 // pink-bluegrey.css
 // purple-green.css
-* { 
+*, *:before, *:after { 
   // font-family: Roboto, Arial, sans-serif;
   font-family: 'Monda', sans-serif;
+  box-sizing: initial;
   margin: 0;
 }
 
@@ -30,13 +32,13 @@
   text-align: center;
 }
 
-.left {
-  text-align: left;
-}
+// .left {
+//   text-align: left;
+// }
 
-.right {
-  text-align: right;
-}
+// .right {
+//   text-align: right;
+// }
 
 .pointer {
   cursor: pointer;

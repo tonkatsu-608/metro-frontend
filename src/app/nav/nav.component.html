@@ -1,8 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <span class="nav-img">
-      <img src="assets/images/metropolist.png" alt="Metropolist" width="282"
-      height="40">
+      <img src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
     <span class="example-spacer"></span>
 
@@ -10,8 +9,8 @@
       <mat-icon class="nav-icon pointer">dashboard</mat-icon>
     </button>
 
-    <button class="nav-btn" mat-raised-button>
-      <mat-icon class="nav-icon pointer" [matMenuTriggerFor]="menu">person</mat-icon>
+    <button class="nav-btn" mat-raised-button [matMenuTriggerFor]="menu">
+      <mat-icon class="nav-icon pointer">person</mat-icon>
     </button>
 
     <mat-menu #menu="matMenu">

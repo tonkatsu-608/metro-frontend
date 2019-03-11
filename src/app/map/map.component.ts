@@ -19,12 +19,7 @@ declare const Metro: any;
   styleUrls: ['./map.component.scss']
 })
 export class MapComponent implements OnInit, ComponentCanDeactivate {
-  sites = 30;
-  segment = 20;
-  distance = 150;
-  isSimulatingSelected = false;
-  isSingleSelected = false;
-  isWarpSelected = false;
+  sites = 100;
   loading = false;
   metro: any;
   mode: string;
@@ -33,6 +28,23 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   currentMap: Map;
   currentUser: User;
   canvas: HTMLCanvasElement;
+  cursorCanvas: HTMLCanvasElement;
+
+  increment = 15;
+  waterline = 0.15;
+  isIncreasing = true;
+  EDIT_MODES = new Set();
+  elevation_view_checked = true;
+  affluence_view_checked = false;
+  desirability_view_checked = false;
+  district_view_checked = false;
+  building_view_checked = false;
+
+  elevation_edit_checked = false;
+  affluence_edit_checked = false;
+  desirability_edit_checked = false;
+  district_edit_checked = false;
+  building_edit_checked = false;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -41,25 +53,37 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
   ngOnInit() {
     this.currentMap = new Map();
-    this.route.params.subscribe(params => {
-      this.userService.getMap(params['id'])
-        .subscribe(
-          data => {
-            this.currentMap = data;
-            this.canvas = d3.select("#myCanvas").node();
-            if(data.data) {
-              this.metro = new Metro(this.canvas, data.data);
-            } else {
-              this.metro = new Metro(this.canvas);
-            }
-          },
-          error => {
-            this.loading = false;
-            this.snackBar.open(error.error.error, "OK", {
-              duration: 4000
-            });
-          });
-    });
+    // this.route.params.subscribe(params => {
+    //   this.userService.getMap(params['id'])
+    //     .subscribe(
+    //       data => {
+    //         this.currentMap = data;
+    //         this.canvas = d3.select("#myCanvas").node();
+    //         if(data.data) {
+    //           this.metro = new Metro(this.canvas, data.data);
+    //         } else {
+    //           this.metro = new Metro(this.canvas);
+    //         }
+    //       },
+    //       error => {
+    //         this.loading = false;
+    //         this.snackBar.open(error.error.error, "OK", {
+    //           duration: 4000
+    //         });
+    //       });
+    // });
+  }
+
+  elevationSwitchOnChange(elememt) {
+    console.log("elevationSwitchOnChange: ", elememt.checked);
+  }
+
+  incrementOnChange(elememt) {
+    console.log("incrementOnChange: ", elememt.value);
+  }
+
+  waterlineOnChange(elememt) {
+    console.log("waterlineOnChange: ", elememt.value);
   }
 
   saveMap() {

@@ -9,8 +9,8 @@
         <mat-form-field class="sites-field">
           <input id="input-sites" matInput placeholder="sites" type="number" [(ngModel)]="sites">
         </mat-form-field>
-        <button class="render-btn" mat-raised-button color="accent" matTooltip="Render"
-          (click)="newGraphics(sites)">Render</button>
+        <button class="render-btn" mat-raised-button color="accent" matTooltip="render"
+          (click)="newGraphics()">Render</button>
       </mat-list-item>
 
       <div class="mat-table">
@@ -22,74 +22,87 @@
         <div class="mat-row">
           <div class="mat-cell">elevation</div>
           <div class="mat-cell">
-            <mat-checkbox id="elevation-view-checkbox" [(ngModel)]="elevation_view_checked"></mat-checkbox>
+            <mat-checkbox id="elevation-view-checkbox" [(ngModel)]="elevation_view_checked"
+              (change)="viewCheckboxOnChange($event)"></mat-checkbox>
           </div>
           <div class="mat-cell">
-            <mat-checkbox id="elevation-edit-checkbox" [(ngModel)]="elevation_edit_checked"></mat-checkbox>
+            <mat-checkbox id="elevation-edit-checkbox" [(ngModel)]="elevation_edit_checked"
+              (change)="editCheckboxOnChange($event)"></mat-checkbox>
           </div>
         </div>
 
         <div class="mat-row">
           <div class="mat-cell">affluence</div>
           <div class="mat-cell">
-            <mat-checkbox id="affluence-view-checkbox" [(ngModel)]="affluence_view_checked"></mat-checkbox>
+            <mat-checkbox id="affluence-view-checkbox" [(ngModel)]="affluence_view_checked"
+              (change)="viewCheckboxOnChange($event)"></mat-checkbox>
           </div>
           <div class="mat-cell">
-            <mat-checkbox id="affluence-edit-checkbox" [(ngModel)]="affluence_edit_checked"></mat-checkbox>
+            <mat-checkbox id="affluence-edit-checkbox" [(ngModel)]="affluence_edit_checked"
+              (change)="editCheckboxOnChange($event)"></mat-checkbox>
           </div>
         </div>
 
         <div class="mat-row">
           <div class="mat-cell">desirability</div>
           <div class="mat-cell">
-            <mat-checkbox id="desirability-view-checkbox" [(ngModel)]="desirability_view_checked"></mat-checkbox>
+            <mat-checkbox id="desirability-view-checkbox" [(ngModel)]="desirability_view_checked"
+              (change)="viewCheckboxOnChange($event)"></mat-checkbox>
           </div>
           <div class="mat-cell">
-            <mat-checkbox id="desirability-edit-checkbox" [(ngModel)]="desirability_edit_checked"></mat-checkbox>
+            <mat-checkbox id="desirability-edit-checkbox" [(ngModel)]="desirability_edit_checked"
+              (change)="editCheckboxOnChange($event)"></mat-checkbox>
           </div>
         </div>
 
         <div class="mat-row">
           <div class="mat-cell">district</div>
           <div class="mat-cell">
-            <mat-checkbox id="district-view-checkbox" [(ngModel)]="district_view_checked"></mat-checkbox>
+            <mat-checkbox id="district-view-checkbox" [(ngModel)]="district_view_checked"
+              (change)="viewCheckboxOnChange($event)"></mat-checkbox>
           </div>
           <div class="mat-cell">
-            <mat-checkbox id="district-edit-checkbox" [(ngModel)]="district_edit_checked"></mat-checkbox>
+            <mat-checkbox id="district-edit-checkbox" [(ngModel)]="district_edit_checked"
+              (change)="editCheckboxOnChange($event)"></mat-checkbox>
           </div>
         </div>
 
         <div class="mat-row">
           <div class="mat-cell">building</div>
           <div class="mat-cell">
-            <mat-checkbox id="building-view-checkbox" [(ngModel)]="building_view_checked"></mat-checkbox>
+            <mat-checkbox id="building-view-checkbox" [(ngModel)]="building_view_checked"
+              (change)="viewCheckboxOnChange($event)"></mat-checkbox>
           </div>
           <div class="mat-cell">
-            <mat-checkbox id="building-edit-checkbox" [(ngModel)]="building_edit_checked"></mat-checkbox>
+            <mat-checkbox id="building-edit-checkbox" [(ngModel)]="building_edit_checked"
+              (change)="editCheckboxOnChange($event)"></mat-checkbox>
           </div>
         </div>
       </div>
 
-      <mat-divider></mat-divider>
-
-      <h2 mat-subheader>elevation settings</h2>
+      <p mat-subheader>elevation settings</p>
       <mat-list-item>
-        decrease&nbsp;&nbsp;
-        <mat-slide-toggle id="elevationSwitch" [(ngModel)]="isIncreasing" (change)="elevationSwitchOnChange($event)">
+        increase&nbsp;&nbsp;
+        <mat-slide-toggle id="elevationSwitch" (change)="elevationSwitchOnChange($event)">
         </mat-slide-toggle>
-        &nbsp;&nbsp;increase
+        &nbsp;&nbsp;decrease
       </mat-list-item>
 
       <mat-list-item>
-        <label for="increment">increment:</label>
-        <mat-slider id="increment" thumbLabel tickInterval="15" min="0" max="100" [(ngModel)]="increment"
-          (change)="incrementOnChange($event)" aria-label="increment"></mat-slider>
+        <label for="incrementSlider">increment:</label>
+        <mat-slider id="incrementSlider" thumbLabel tickInterval="0.15" min="0" max="1" step="0.01" value="0.15"
+          (change)="incrementSliderOnChange($event)" aria-label="increment"></mat-slider>
       </mat-list-item>
 
       <mat-list-item>
         <label for="waterLineSlider">waterline:</label>
-        <mat-slider id="waterLineSlider" thumbLabel tickInterval="0.15" min="0" max="1" step="0.01"
-          [(ngModel)]="waterline" (change)="waterlineOnChange($event)" aria-label="waterline"></mat-slider>
+        <mat-slider id="waterLineSlider" thumbLabel tickInterval="0.15" min="0" max="1" step="0.01" value="0.15"
+          (change)="waterLineSliderOnChange($event)" aria-label="waterline"></mat-slider>
+      </mat-list-item>
+
+      <mat-list-item>
+        <button mat-raised-button color="accent" matTooltip="draw contourline" (click)="drawContourLine()">Draw
+          Contourline</button>
       </mat-list-item>
     </mat-list>
   </div>

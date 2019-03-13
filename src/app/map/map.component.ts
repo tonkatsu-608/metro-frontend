@@ -85,73 +85,52 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   // onChange event of view-check-box elements
-  viewCheckboxOnChange(element) {
+  checkboxOnChange(element, type) {
     let isChecked = element.checked;
     let layerName = element.source.id.slice(0, element.source.id.indexOf('-'));
 
-    this.metro.viewCheckboxOnChange(layerName, isChecked);
+    // change map's layers
+    this.metro.checkboxOnChange(type, layerName, isChecked);
 
-    switch (layerName) {
-      case 'elevation': this.changeViewModes(layerName, isChecked, element); break;
-      case 'affluence': this.changeViewModes(layerName, isChecked, element); break;
-      case 'desirability': this.changeViewModes(layerName, isChecked, element); break;
-      case 'district': this.changeViewModes(layerName, isChecked, element); break;
-      case 'building': this.changeViewModes(layerName, isChecked, element); break;
-    }
+    // change dom element
+    this.changeModes(type, layerName, isChecked, element);
   }
 
-  changeViewModes(layerName, isChecked, element) {
-    if (isChecked) {
-      this.VIEW_MODES.add(layerName);
-    } else {
-      if (this.VIEW_MODES.size === 1) {
-        console.log("before 1: ", element);
-        element.checked = true;
-        console.log("after 1: ", element);
-        return;
-      } else if (this.VIEW_MODES.has(layerName)) {
-        this.EDIT_MODES.delete(layerName);
-        this.VIEW_MODES.delete(layerName);
-        switch (layerName) {
-          case 'elevation': this.elevation_edit_checked = false; break;
-          case 'affluence': this.affluence_edit_checked = false; break;
-          case 'desirability': this.desirability_edit_checked = false; break;
-          case 'district': this.desirability_edit_checked = false; break;
-          case 'building': this.building_edit_checked = false; break;
+  // onChange event of viewLayer + editLayer
+  changeModes(type, layerName, isChecked, element) {
+    if (type === 'view') {
+      if (isChecked) {
+        this.VIEW_MODES.add(layerName);
+      } else {
+        if (this.VIEW_MODES.size === 1) {
+          element.checked = true;
+          return;
+        } else if (this.VIEW_MODES.has(layerName)) {
+          this.EDIT_MODES.delete(layerName);
+          this.VIEW_MODES.delete(layerName);
+          switch (layerName) {
+            case 'elevation': this.elevation_edit_checked = false; break;
+            case 'affluence': this.affluence_edit_checked = false; break;
+            case 'desirability': this.desirability_edit_checked = false; break;
+            case 'district': this.desirability_edit_checked = false; break;
+            case 'building': this.building_edit_checked = false; break;
+          }
         }
       }
-    }
-  }
-
-  // onChange event of edit-check-box elements
-  editCheckboxOnChange(element) {
-    let isChecked = element.checked;
-    let layerName = element.source.id.slice(0, element.source.id.indexOf('-'));
-
-    this.metro.editCheckboxOnChange(layerName, isChecked);
-
-    switch (layerName) {
-      case 'elevation': this.changeEditModes(layerName, isChecked); break;
-      case 'affluence': this.changeEditModes(layerName, isChecked); break;
-      case 'desirability': this.changeEditModes(layerName, isChecked); break;
-      case 'district': this.changeEditModes(layerName, isChecked); break;
-      case 'building': this.changeEditModes(layerName, isChecked); break;
-    }
-  }
-
-  changeEditModes(layerName, isChecked) {
-    if (isChecked) {
-      this.VIEW_MODES.add(layerName);
-      this.EDIT_MODES.add(layerName);
-      switch (layerName) {
-        case 'elevation': this.elevation_view_checked = true; break;
-        case 'affluence': this.affluence_view_checked = true; break;
-        case 'desirability': this.desirability_view_checked = true; break;
-        case 'district': this.district_view_checked = true; break;
-        case 'building': this.building_view_checked = true; break;
-      }
     } else {
-      this.EDIT_MODES.delete(layerName);
+      if (isChecked) {
+        this.VIEW_MODES.add(layerName);
+        this.EDIT_MODES.add(layerName);
+        switch (layerName) {
+          case 'elevation': this.elevation_view_checked = true; break;
+          case 'affluence': this.affluence_view_checked = true; break;
+          case 'desirability': this.desirability_view_checked = true; break;
+          case 'district': this.district_view_checked = true; break;
+          case 'building': this.building_view_checked = true; break;
+        }
+      } else {
+        this.EDIT_MODES.delete(layerName);
+      }
     }
   }
 
@@ -179,7 +158,9 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
     map.data = this.convertGraphics2Object(this.metro.graphics);
+    // map.data = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+    console.log("saving map...", map);
     this.userService.saveMap(map)
       .subscribe(
         data => {
@@ -199,15 +180,12 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
   convertGraphics2Object(graphics) {
     let data = {
-      segment: graphics.SEGMENT,
-      distance: graphics.DISTANCE,
-      sites: graphics.sites,
+      sites: graphics.sites.map(processSite),
       diagram: processDiagram(graphics.diagram),
-      links: graphics.links,
       edges: graphics.edges.map(processEdge),
-      polygons: graphics.polygons,
-      clusters: graphics.clusters,
-      buildings: graphics.buildings,
+      links: graphics.links,
+      triangles: graphics.triangles.map(t => t.map(processSite)),
+      polygons: graphics.polygons.map(processPolygon),
       vertices: graphics.vertices.map(processVertex),
     };
     console.log("saving...", data);
@@ -230,6 +208,20 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
       return diagram;
     }
+    function processSite(s) {
+      return {
+        x: s[0],
+        y: s[1],
+        type: s.type,
+        wall: s.wall,
+        index: s.index,
+        color: s.color,
+        elevation: s.elevation,
+        affluence: s.affluence,
+        isBoundary: s.isBoundary,
+        desirability: s.desirability,
+      };
+    }
 
     function processEdge(e) {
       if (e === null || e === undefined) return;
@@ -249,11 +241,14 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           x: graphics.sites[e.left.index][0],
           y: graphics.sites[e.left.index][1],
           index: e.left.index,
+          data: e.left.data,
         },
         right: e.right ? {
           x: graphics.sites[e.right.index][0],
           y: graphics.sites[e.right.index][1],
           index: e.right.index,
+          data: e.right.data,
+
         } : null,
       }
     }
@@ -265,6 +260,26 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
         edgeIndex: v.edgeIndex,
         vertexIndex: v.vertexIndex,
       };
+    }
+
+    function processPolygon(p) {
+      if (p === null || p === undefined) return;
+
+      let poly = {
+        area: p.area,
+        index: p.index,
+        edges: p.edges,
+        center: p.center,
+        vertices: p.vertices,
+        isBoundary: p.isBoundary,
+        buildings: null,
+        subPolygons: null,
+    };
+
+    if(p.building) {
+    }
+
+      return poly;
     }
   }
 

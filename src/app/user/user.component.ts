@@ -158,6 +158,7 @@ export class CreateMapDialog {
     this.loading = true;
     let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     let map = new Map();
+    
     map.uid = this.data.uid;
     map.createDate = createDate;
     map.editDate = createDate;

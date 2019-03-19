@@ -157,12 +157,12 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
-    map.data = this.convertGraphics2Object(this.metro.graphics);
+    map.data = this.convertGraphics2Object(this.metro.getGraphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     console.log("saving map...", map);
     this.userService.saveMap(map)
       .subscribe(
-        data => {
+        () => {
           this.loading = false;
           this.isSave = true;
           this.snackBar.open("Save successfully!", "OK", {
@@ -178,43 +178,19 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   convertGraphics2Object(graphics) {
-    function stringify(obj) {
-      let type = typeof obj;
-
-      if (type == 'string') {
-        return '"' + obj + '"';
-
-      } else if (type == 'number' || type == 'undefined' || type == null || type == 'boolean') {
-        return obj + '';
-      }
-
-      let kv = [];
-
-      for (let prop in obj) {
-        kv.push(stringify(prop) + ':' + stringify(obj[prop]));
-      }
-
-      if (Array.isArray(obj)) {
-        kv.push('"length":' + obj.length);
-      }
-
-      return "{" + kv.join(',') + '}';
-    }
-
     let data = {
       sites: graphics.sites.map(processSite),
       diagram: processDiagram(graphics.diagram),
       edges: graphics.edges.map(processEdge),
       links: graphics.links,
       triangles: graphics.triangles.map(t => t.map(processSite)),
-      // polygons: graphics.polygons,
       polygons: graphics.polygons.map(stringify),
       vertices: graphics.vertices.map(processVertex),
     };
-    console.log("saving...", data);
 
     return data;
 
+    // convert diagram to object
     function processDiagram(diagram) {
       diagram.edges = diagram.edges.map(processEdge);
       diagram.cells = diagram.cells.map(cell => {
@@ -231,13 +207,14 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
       return diagram;
     }
+
+    // convert site to object
     function processSite(s) {
       return {
         x: s[0],
         y: s[1],
         type: s.type,
         wall: s.wall,
-        site: s.site,
         index: s.index,
         color: s.color,
         delta: s.delta,
@@ -248,6 +225,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       };
     }
 
+    // convert edge to object
     function processEdge(e) {
       if (e === null || e === undefined) return;
 
@@ -278,6 +256,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       }
     }
 
+    // convert vertex to object
     function processVertex(v) {
       return {
         x: v[0],
@@ -287,24 +266,32 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       };
     }
 
-    function processPolygon(p) {
-      if (p === null || p === undefined) return;
-
-      let poly = {
-        area: p.area,
-        index: p.index,
-        edges: p.edges,
-        center: p.center,
-        vertices: p.vertices,
-        isBoundary: p.isBoundary,
-        buildings: null,
-        subPolygons: null,
-      };
-
-      if (p.building) {
+    // convert polygon to string
+    function stringify(obj) {
+      if (obj === undefined) {
+        obj = [];
       }
 
-      return poly;
+      let type = typeof obj;
+
+      if (type === 'string') {
+        return '"' + obj + '"';
+
+      } else if (type === 'number' || type === 'undefined' || type === 'boolean') {
+        return obj + '';
+      }
+
+      let kv = [];
+
+      for (let prop in obj) {
+        kv.push(stringify(prop) + ':' + stringify(obj[prop]));
+      }
+
+      if (Array.isArray(obj)) {
+        kv.push('"length":' + obj.length);
+      }
+
+      return "{" + kv.join(',') + '}';
     }
   }
 

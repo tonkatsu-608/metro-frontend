@@ -112,7 +112,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             case 'elevation': this.elevation_edit_checked = false; break;
             case 'affluence': this.affluence_edit_checked = false; break;
             case 'desirability': this.desirability_edit_checked = false; break;
-            case 'district': this.desirability_edit_checked = false; break;
+            case 'district': this.district_edit_checked = false; break;
             case 'building': this.building_edit_checked = false; break;
           }
         }
@@ -157,9 +157,10 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
-    map.data = this.convertGraphics2Object(this.metro.getGraphics);
+    map.data = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     console.log("saving map...", map);
+
     this.userService.saveMap(map)
       .subscribe(
         () => {
@@ -178,7 +179,9 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   convertGraphics2Object(graphics) {
+    console.log("save again: ", graphics);
     let data = {
+      currentCastle: graphics.currentCastle,
       sites: graphics.sites.map(processSite),
       diagram: processDiagram(graphics.diagram),
       edges: graphics.edges.map(processEdge),
@@ -227,7 +230,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
     // convert edge to object
     function processEdge(e) {
-      if (e === null || e === undefined) return;
+      if (e === null || e === undefined || !e[0] || !e[1]) return;
 
       return {
         startPoint:

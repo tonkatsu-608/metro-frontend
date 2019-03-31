@@ -3,6 +3,7 @@ import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+
 import 'rxjs/add/operator/filter';
 
 import { Map } from '../_model/map.model';
@@ -76,7 +77,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
 
   // new graphics
   newGraphics() {
-    this.metro.newGraphics(this.sites);
+    this.metro.graphics = this.metro.newGraphics(this.sites);
   }
 
   // draw contour line
@@ -295,6 +296,13 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       }
 
       return "{" + kv.join(',') + '}';
+    }
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.newGraphics();
     }
   }
 

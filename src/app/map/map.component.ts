@@ -180,13 +180,12 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   convertGraphics2Object(graphics) {
-    console.log("save again: ", graphics);
     let data = {
       currentCastle: graphics.currentCastle,
       sites: graphics.sites.map(processSite),
       diagram: processDiagram(graphics.diagram),
       edges: graphics.edges.map(processEdge),
-      links: graphics.links,
+      links: graphics.links.map(processLink),
       triangles: graphics.triangles.map(t => t.map(processSite)),
       polygons: graphics.polygons.map(stringify),
       vertices: graphics.vertices.map(processVertex),
@@ -204,12 +203,19 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             x: cell.site[0],
             y: cell.site[1],
             index: cell.site.index,
-            data: cell.site.data,
+            data: processSite(cell.site.data),
           },
         };
       });
 
       return diagram;
+    }
+
+    function processLink(l) {
+      return {
+        source: processSite(l.source),
+        target: processSite(l.target),
+      }
     }
 
     // convert site to object
@@ -236,13 +242,17 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       return {
         startPoint:
         {
-          vertexIndex: e[0].vertexIndex,
-          edgeIndex: e[0].edgeIndex,
+          x: e[0][0],
+          y: e[0][1],
+          vertexIndex: e[0].vertexIndex || null,
+          edgeIndex: e[0].edgeIndex || null,
         },
         endPoint:
         {
-          vertexIndex: e[1].vertexIndex,
-          edgeIndex: e[1].edgeIndex,
+          x: e[1][0],
+          y: e[1][1],
+          vertexIndex: e[1].vertexIndex || null,
+          edgeIndex: e[1].edgeIndex || null,
         },
         left: {
           x: graphics.sites[e.left.index][0],

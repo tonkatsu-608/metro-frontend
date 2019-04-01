@@ -33,6 +33,7 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/d3/build/d3.min.js",
+              "node_modules/topojson/dist/topojson.min.js",
               "node_modules/d3-context-menu/dist/d3-context-menu.min.js",
               "node_modules/polygon-split/index.js",
               "node_modules/metropolist/index.js"

@@ -184,6 +184,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       currentCastle: graphics.currentCastle,
       sites: graphics.sites.map(processSite),
       diagram: processDiagram(graphics.diagram),
+      cells: graphics.cells.map(processCell),
       edges: graphics.edges.map(processEdge),
       links: graphics.links.map(processLink),
       triangles: graphics.triangles.map(t => t.map(processSite)),
@@ -196,17 +197,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     // convert diagram to object
     function processDiagram(diagram) {
       diagram.edges = diagram.edges.map(processEdge);
-      diagram.cells = diagram.cells.map(cell => {
-        return {
-          halfedges: cell.halfedges,
-          site: {
-            x: cell.site[0],
-            y: cell.site[1],
-            index: cell.site.index,
-            data: processSite(cell.site.data),
-          },
-        };
-      });
+      diagram.cells = diagram.cells.map(processCell);
 
       return diagram;
     }
@@ -235,6 +226,21 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       };
     }
 
+    // convert cell to object
+    function processCell(c) {
+      if (c === null || c === undefined) return;
+
+      return {
+        halfedges: c.halfedges,
+        site: {
+          x: c.site[0],
+          y: c.site[1],
+          index: c.site.index,
+          data: processSite(c.site.data),
+        },
+      };
+    }
+
     // convert edge to object
     function processEdge(e) {
       if (e === null || e === undefined || !e[0] || !e[1]) return;
@@ -258,13 +264,13 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           x: graphics.sites[e.left.index][0],
           y: graphics.sites[e.left.index][1],
           index: e.left.index,
-          data: e.left.data,
+          data: processSite(e.left.data),
         },
         right: e.right ? {
           x: graphics.sites[e.right.index][0],
           y: graphics.sites[e.right.index][1],
           index: e.right.index,
-          data: e.right.data,
+          data: processSite(e.right.data),
 
         } : null,
       }

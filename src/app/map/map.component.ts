@@ -61,6 +61,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             this.canvas = d3.select("#myCanvas").node();
             this.cursorCanvas = d3.select("#cursorCanvas").node();
             if (data.data) {
+              console.log("data.data: ", data.data);
               this.metro = new Metro(this.canvas, this.cursorCanvas, data.data);
             } else {
               this.metro = new Metro(this.canvas, this.cursorCanvas);
@@ -183,8 +184,8 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     let data = {
       currentCastle: graphics.currentCastle,
       sites: graphics.sites.map(processSite),
-      diagram: processDiagram(graphics.diagram),
-      cells: graphics.cells.map(processCell),
+      // diagram: processDiagram(graphics.diagram),
+      // cells: graphics.cells.map(processCell),
       edges: graphics.edges.map(processEdge),
       links: graphics.links.map(processLink),
       triangles: graphics.triangles.map(t => t.map(processSite)),
@@ -260,19 +261,20 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
           vertexIndex: e[1].vertexIndex || null,
           edgeIndex: e[1].edgeIndex || null,
         },
-        left: {
-          x: graphics.sites[e.left.index][0],
-          y: graphics.sites[e.left.index][1],
-          index: e.left.index,
-          data: processSite(e.left.data),
-        },
-        right: e.right ? {
-          x: graphics.sites[e.right.index][0],
-          y: graphics.sites[e.right.index][1],
-          index: e.right.index,
-          data: processSite(e.right.data),
-
-        } : null,
+        left: e.left,
+        right: e.hasOwnProperty('right') && e.right !== null ? e.right : null,
+        // left: {
+        //   x: graphics.sites[e.left.index][0],
+        //   y: graphics.sites[e.left.index][1],
+        //   index: e.left.index,
+        //   data: processSite(e.left.data),
+        // },
+        // right: e.hasOwnProperty('right') && e.right !== null ? {
+        //   x: graphics.sites[e.right.index][0],
+        //   y: graphics.sites[e.right.index][1],
+        //   index: e.right.index,
+        //   data: processSite(e.right.data),
+        // } : null,
       }
     }
 

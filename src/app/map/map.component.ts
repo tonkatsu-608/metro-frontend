@@ -61,7 +61,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             this.canvas = d3.select("#myCanvas").node();
             this.cursorCanvas = d3.select("#cursorCanvas").node();
             if (data.data) {
-              console.log("data.data: ", data.data);
               this.metro = new Metro(this.canvas, this.cursorCanvas, data.data);
             } else {
               this.metro = new Metro(this.canvas, this.cursorCanvas);
@@ -184,8 +183,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     let data = {
       currentCastle: graphics.currentCastle,
       sites: graphics.sites.map(processSite),
-      // diagram: processDiagram(graphics.diagram),
-      // cells: graphics.cells.map(processCell),
       edges: graphics.edges.map(processEdge),
       links: graphics.links.map(processLink),
       triangles: graphics.triangles.map(t => t.map(processSite)),
@@ -194,14 +191,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     };
 
     return data;
-
-    // convert diagram to object
-    function processDiagram(diagram) {
-      diagram.edges = diagram.edges.map(processEdge);
-      diagram.cells = diagram.cells.map(processCell);
-
-      return diagram;
-    }
 
     function processLink(l) {
       return {
@@ -227,21 +216,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
       };
     }
 
-    // convert cell to object
-    function processCell(c) {
-      if (c === null || c === undefined) return;
-
-      return {
-        halfedges: c.halfedges,
-        site: {
-          x: c.site[0],
-          y: c.site[1],
-          index: c.site.index,
-          data: processSite(c.site.data),
-        },
-      };
-    }
-
     // convert edge to object
     function processEdge(e) {
       if (e === null || e === undefined || !e[0] || !e[1]) return;
@@ -263,18 +237,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
         },
         left: e.left,
         right: e.hasOwnProperty('right') && e.right !== null ? e.right : null,
-        // left: {
-        //   x: graphics.sites[e.left.index][0],
-        //   y: graphics.sites[e.left.index][1],
-        //   index: e.left.index,
-        //   data: processSite(e.left.data),
-        // },
-        // right: e.hasOwnProperty('right') && e.right !== null ? {
-        //   x: graphics.sites[e.right.index][0],
-        //   y: graphics.sites[e.right.index][1],
-        //   index: e.right.index,
-        //   data: processSite(e.right.data),
-        // } : null,
       }
     }
 

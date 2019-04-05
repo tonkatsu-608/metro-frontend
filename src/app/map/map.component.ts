@@ -80,11 +80,6 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     this.metro.graphics = this.metro.newGraphics(this.sites);
   }
 
-  // draw contour line
-  drawContourLine() {
-    this.metro.drawContourLine();
-  }
-
   // onChange event of view-check-box elements
   checkboxOnChange(element, type) {
     let isChecked = element.checked;
@@ -133,6 +128,16 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
         this.EDIT_MODES.delete(layerName);
       }
     }
+  }
+
+  // show contour line
+  showContourLine() {
+    this.metro.drawContourLine();
+  }
+
+  // show street names
+  streetNameSwitchOnChange(elememt) {
+    this.metro.streetNameSwitchOnChange(!elememt.checked);
   }
 
   // onChange event of elevation switch

@@ -80,7 +80,14 @@
         </div>
       </div>
 
-      <p mat-subheader>elevation settings</p>
+      <p mat-subheader>settings</p>
+      <mat-list-item>
+        show name&nbsp;&nbsp;
+        <mat-slide-toggle id="streetNameSwitch" (change)="streetNameSwitchOnChange($event)">
+        </mat-slide-toggle>
+        &nbsp;&nbsp;hide
+      </mat-list-item>
+
       <mat-list-item>
         increase&nbsp;&nbsp;
         <mat-slide-toggle id="elevationSwitch" (change)="elevationSwitchOnChange($event)">
@@ -101,7 +108,7 @@
       </mat-list-item>
 
       <mat-list-item>
-        <button mat-raised-button color="accent" matTooltip="draw contourline" (click)="drawContourLine()">Draw
+        <button mat-raised-button color="accent" matTooltip="show contourline" (click)="showContourLine()">Show
           Contourline</button>
       </mat-list-item>
     </mat-list>

@@ -28,7 +28,7 @@ export class UserComponent implements OnInit, OnDestroy {
   maps: Map[] = [];
   currentUser: User;
   currentUserSubscription: Subscription;
-  displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate', 'operation'];
+  displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate', 'isVisible', 'operation'];
   dataSource: MatTableDataSource<Map>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -45,6 +45,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.currentUser = user;
     });
     this.refresh();
+    this.refresh();
   }
 
   ngOnDestroy() {
@@ -56,6 +57,10 @@ export class UserComponent implements OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  onChangeIsVisible(id, element): void {
+    console.log(id, element);
   }
 
   editMap(id): void {
@@ -158,12 +163,13 @@ export class CreateMapDialog {
     this.loading = true;
     let createDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     let map = new Map();
-    
+
     map.uid = this.data.uid;
+    map.name = this.data.mapName;
     map.createDate = createDate;
     map.editDate = createDate;
-    map.name = this.data.mapName;
-    map.img = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // The Tiniest GIF Ever
+    map.isVisible = true;
+    map.img = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // The Tiniest Gif Ever
     this.userService.createMap(map)
       .subscribe(
         data => {

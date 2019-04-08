@@ -6,4 +6,5 @@ export class Map {
   data: any;
   createDate: string;
   editDate: string;
+  isVisible: boolean;
 }

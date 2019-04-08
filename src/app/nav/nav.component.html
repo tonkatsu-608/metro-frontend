@@ -1,7 +1,7 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span class="nav-img">
-      <img src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
+    <span class="nav-img-span">
+      <img class="nav-img" src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
     <span class="example-spacer"></span>
 
@@ -17,15 +17,15 @@
       <mat-card *ngIf="currentUser">
         <mat-card-header class="sidenav-card-hrader">
           <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title class="sidenax-card-title">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
-          <mat-card-subtitle class="sidenax-card-title">{{currentUser.email}}</mat-card-subtitle>
+          <mat-card-title class="sidenav-card-title">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
+          <mat-card-subtitle class="sidenav-card-title">{{currentUser.email}}</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
-      <button mat-menu-item [routerLink]="['/profile']">
+      <button mat-menu-item class="sidenav-card-btn" [routerLink]="['/profile']">
         <mat-icon>account_box</mat-icon>
         <span>Profile</span>
       </button>
-      <button mat-menu-item (click)="logout()">
+      <button mat-menu-item class="sidenav-card-btn" (click)="logout()">
         <mat-icon>input</mat-icon>
         <span>Log out</span>
       </button>

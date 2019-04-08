@@ -136,23 +136,23 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   }
 
   // show street names
-  streetNameSwitchOnChange(elememt) {
-    this.metro.streetNameSwitchOnChange(!elememt.checked);
+  streetNameSwitchOnChange(element) {
+    this.metro.streetNameSwitchOnChange(!element.checked);
   }
 
   // onChange event of elevation switch
-  elevationSwitchOnChange(elememt) {
-    this.metro.elevationSwitchOnChange(elememt.checked);
+  elevationSwitchOnChange(element) {
+    this.metro.elevationSwitchOnChange(element.checked);
   }
 
   // onChange event of increment slider
-  incrementSliderOnChange(elememt) {
-    this.metro.incrementSliderOnChange(elememt.value);
+  incrementSliderOnChange(element) {
+    this.metro.incrementSliderOnChange(element.value);
   }
 
   // onChange event of waterline slider
-  waterLineSliderOnChange(elememt) {
-    this.metro.waterLineSliderOnChange(elememt.value);
+  waterLineSliderOnChange(element) {
+    this.metro.waterLineSliderOnChange(element.value);
   }
 
   saveMap() {
@@ -163,6 +163,7 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.uid = this.currentMap.uid;
     map.name = this.currentMap.name;
     map.img = this.canvas.toDataURL();
+    map.isVisible = this.currentMap.isVisible;
     map.data = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     console.log("saving map...", map);

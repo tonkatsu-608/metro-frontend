@@ -1,20 +1,22 @@
 <app-nav></app-nav>
 <mat-progress-bar *ngIf="loading" color="accent" mode="indeterminate"></mat-progress-bar>
 
-<div class="container basic-container">
-  <mat-tab-group mat-stretch-tabs class="profile-stretched-tabs mat-elevation-z4">
+<div class="container">
+  <mat-tab-group mat-stretch-tabs class="mat-elevation-z4">
     <mat-tab label="Personal Info">
       <mat-card class="padding-0 mat-elevation-z0">
-        <mat-card-header class="profile-backgound" [ngStyle]="{'background-image': getBackground()}" (mouseenter)="isBgEnter = true"
-          (mouseleave)="isBgEnter = false">
-          <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button">
+        <mat-card-header class="profile-backgound" [ngStyle]="{'background-image': getBackground()}"
+          (mouseenter)="isBgEnter = true" (mouseleave)="isBgEnter = false">
+          <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button"
+            matTooltip="upload background image">
             <mat-icon>camera_alt</mat-icon>
           </button>
         </mat-card-header>
 
         <mat-card-header class="profile-header">
           <div class="profile-avatar center" (mouseenter)="isEnter = true" (mouseleave)="isEnter = false">
-            <button mat-icon-button class="mat-elevation-z1 avatar-camera-btn" *ngIf="isEnter" type="button">
+            <button mat-icon-button class="mat-elevation-z1 avatar-camera-btn" *ngIf="isEnter" type="button"
+              matTooltip="upload avatar">
               <mat-icon>camera_alt</mat-icon>
             </button>
             <img mat-card-avatar src="assets/images/avatar-0.jpg" class="avatar mat-elevation-z2" />
@@ -27,30 +29,30 @@
           {{currentUser.lastname}}</mat-card-title>
       </mat-card>
 
-      <mat-grid-list cols="2" rowHeight="9:4">
-        <!--Email tile-->
-        <mat-grid-tile>
+      <div class="row">
+        <div class="col l6 s12">
           <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Email
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="update email" *ngIf="emailForm.valid && isEmailChanged">
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="update email"
+                  *ngIf="emailForm.valid && isEmailChanged">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>
               <mat-card-content>
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="Email" formControlName="email">
-                  <mat-error *ngIf="emailForm.controls['email'].errors?.email">Email should be typed in right format.</mat-error>
+                  <mat-error *ngIf="emailForm.controls['email'].errors?.email">Email should be typed in right format.
+                  </mat-error>
                 </mat-form-field>
               </mat-card-content>
             </mat-card>
           </form>
-        </mat-grid-tile>
+        </div>
 
-        <!--Password tile-->
-        <mat-grid-tile *ngIf="!isConfirmed">
-          <form [formGroup]="passwordForm" (ngSubmit)="verifyPassword()">
+        <div class="col l6 s12">
+          <form [formGroup]="passwordForm" (ngSubmit)="verifyPassword()" *ngIf="!isConfirmed">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Password
@@ -61,39 +63,43 @@
               <mat-card-content>
                 <mat-form-field class="example-full-width">
                   <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
-                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  <mat-error *ngIf="passwordForm.controls['password'].errors?.minLength">Minimum 3 characters needed.</mat-error>
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
+                  <mat-error *ngIf="passwordForm.controls['password'].errors?.minLength">Minimum 3 characters needed.
+                  </mat-error>
                 </mat-form-field>
               </mat-card-content>
             </mat-card>
           </form>
-        </mat-grid-tile>
 
-        <!--Confirm Password tile-->
-        <mat-grid-tile *ngIf="isConfirmed">
-          <form [formGroup]="confirmPasswordForm" (ngSubmit)="onUpdatePassword()">
+          <form [formGroup]="confirmPasswordForm" (ngSubmit)="onUpdatePassword()" *ngIf="isConfirmed">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Password
-                <button mat-icon-button class="update-btn" type="button" matTooltip="go back" (click)="isConfirmed = false">
+                <button mat-icon-button class="update-btn" type="button" matTooltip="go back"
+                  (click)="isConfirmed = false">
                   <mat-icon>arrow_back</mat-icon>
                 </button>
-                <button mat-icon-button class="change-password-btn" type="submit" matTooltip="change password" *ngIf="confirmPasswordForm.valid">
+                <button mat-icon-button class="change-password-btn" type="submit" matTooltip="change password"
+                  *ngIf="confirmPasswordForm.valid">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>
               <mat-card-content>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="New Password" formControlName="newPassword" [type]="hide ? 'password' : 'text'">
-                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  <input matInput placeholder="New Password" formControlName="newPassword"
+                    [type]="hide ? 'password' : 'text'">
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
                   <mat-error *ngIf="confirmPasswordForm.controls['newPassword'].errors?.minLength">Minimum 3 characters
                     needed</mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Confirm Password" formControlName="confirmNewPassword" [type]="hide ? 'password' : 'text'"
-                    [errorStateMatcher]="passwordMatcher">
-                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  <input matInput placeholder="Confirm Password" formControlName="confirmNewPassword"
+                    [type]="hide ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher">
+                  <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
+                  </mat-icon>
                   <mat-error *ngIf="confirmPasswordForm.controls['confirmNewPassword'].errors?.minLength">Minimum 3
                     characters needed</mat-error>
                   <mat-error *ngIf="confirmPasswordForm.hasError('notSame')">Passwords do not match</mat-error>
@@ -101,15 +107,15 @@
               </mat-card-content>
             </mat-card>
           </form>
-        </mat-grid-tile>
+        </div>
 
-        <!--Name tile-->
-        <mat-grid-tile>
+        <div class="col l6 s12">
           <form [formGroup]="nameForm" (ngSubmit)="onUpdateName()">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Name
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="update name" *ngIf="nameForm.valid && isNameChanged">
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="update name"
+                  *ngIf="nameForm.valid && isNameChanged">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>
@@ -123,10 +129,9 @@
               </mat-card-content>
             </mat-card>
           </form>
-        </mat-grid-tile>
+        </div>
 
-        <!--Block tile-->
-        <mat-grid-tile>
+        <div class="col l6 s12">
           <form [formGroup]="deleteForm" (ngSubmit)="onBlock()">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
@@ -137,21 +142,23 @@
                   <textarea matInput placeholder="Leave a reason" formControlName="reason"></textarea>
                 </mat-form-field>
               </mat-card-content>
-              <mat-card-actions class="right">
-                <button mat-raised-button type="button" color="warn" [disabled]="deleteForm.invalid" (click)="openDeleteDialog()">Delete</button>
+              <mat-card-actions>
+                <button mat-raised-button class="delete-btn" type="button" color="warn" [disabled]="deleteForm.invalid"
+                  (click)="openDeleteDialog()">Delete
+                </button>
               </mat-card-actions>
             </mat-card>
           </form>
-        </mat-grid-tile>
-      </mat-grid-list>
+        </div>
+      </div>
     </mat-tab>
 
     <mat-tab label="Preferences">
-      <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
-        <mat-grid-list cols="2" rowHeight="9:4">
+      <div class="row">
+        <form [formGroup]="emailForm" (ngSubmit)="onUpdateEmail()">
 
-          <!--Date tile-->
-          <mat-grid-tile>
+          <div class="col l6 s12">
+            <!--Date tile-->
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">Date Format</mat-card-header>
               <mat-card-content>
@@ -163,10 +170,10 @@
                 </mat-form-field>
               </mat-card-content>
             </mat-card>
-          </mat-grid-tile>
+          </div>
 
-          <!--Map display tile-->
-          <mat-grid-tile>
+          <div class="col l6 s12">
+            <!--Map display tile-->
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">Map display mode</mat-card-header>
               <mat-card-content>
@@ -178,12 +185,11 @@
                 </mat-form-field>
               </mat-card-content>
             </mat-card>
-          </mat-grid-tile>
+          </div>
 
-        </mat-grid-list>
-        <button mat-raised-button class="setting-btn" type="button" disabled color="primary">Save</button>
-      </form>
-
+          <button mat-raised-button class="setting-btn" type="button" disabled color="primary">Save</button>
+        </form>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>

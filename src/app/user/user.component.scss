@@ -1,27 +1,27 @@
-mat-card {
-  cursor: pointer;
-}
-
-table {
-  width: 100%;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
 .operation-btn {
-  margin: 10px;
+  margin: 3%;
 }
 
 .create-btn {
-  right: 2%;
-  bottom: 5%;
+  right: 3%;
+  bottom: 3%;
   position: fixed;
 }
 
 .map-img {
   width: 142px;
   height: 92px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .map-img {
+    width: 71px;
+    height: 46px;
+  }
+
+  .operation-btn {
+    margin: 0;
+  }
 }

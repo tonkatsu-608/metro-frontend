@@ -7,39 +7,21 @@
 // purple-green.css
 *, *:before, *:after { 
   // font-family: Roboto, Arial, sans-serif;
-  font-family: 'Monda', sans-serif;
+  font-family: 100%,'Monda', sans-serif;
   box-sizing: initial;
   margin: 0;
 }
 
-.container {
-  margin-left: 15%;
-  margin-right: 15%;
+.pointer {
+  cursor: pointer;
 }
 
-.basic-container {
-  padding: 30px;
-}
-
-.version-info {
-  font-size: 8pt;
-  float: right;
+.form-field {
+  width: 100%;
 }
 
 .center {
   margin: auto;
   width: 100%;
   text-align: center;
-}
-
-// .left {
-//   text-align: left;
-// }
-
-// .right {
-//   text-align: right;
-// }
-
-.pointer {
-  cursor: pointer;
 }

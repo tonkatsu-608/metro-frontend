@@ -17,9 +17,11 @@
   </mat-form-field>
 </p> -->
 
-<div *ngIf="maps.length === 0">
-  No Records Found!
+<div class="center" *ngIf="maps.length === 0">
+  <!-- No Records Found! -->
+  <mat-spinner class="center" color="accent"></mat-spinner>
 </div>
+
 
 <div *ngIf="maps && maps.length !== 0">
   <mat-form-field>
@@ -45,6 +47,16 @@
       <ng-container matColumnDef="editDate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Edit Date </th>
         <td mat-cell *matCellDef="let row"> {{row.editDate}} </td>
+      </ng-container>
+
+      <!-- isVisible Column -->
+      <ng-container matColumnDef="isVisible">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> isVisible </th>
+        <td mat-cell *matCellDef="let row">
+          private &nbsp;&nbsp;
+          <mat-slide-toggle [color]="accent" [checked]="row.isVisible" (click)="onChangeIsVisible(row.id)"></mat-slide-toggle>
+          &nbsp;&nbsp; public
+        </td>
       </ng-container>
 
       <!-- Img Column -->

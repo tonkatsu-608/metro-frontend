@@ -11,8 +11,8 @@
   width: 420px;
   height: inherit;
   max-width: 90%;
-  margin-top: 2%;
-  padding: 2%;
+  margin-top: 3%;
+  padding: 3%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -20,10 +20,14 @@
 .login-card > * {
   margin: auto;
   width: 50%;
-  padding: 2%; 
+  padding: 3%; 
 }
 
 @media only screen and (max-width: 600px) {
+  .login-card {
+    margin-top: 50%;
+  }
+
   .login-card > * {
     margin: auto;
     width: 70%;

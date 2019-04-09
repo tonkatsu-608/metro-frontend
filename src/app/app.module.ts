@@ -21,6 +21,7 @@ import { MapComponent } from './map/map.component';
 import { MapGuard } from './_guard/map.guard';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent, DeleteUserDialog } from './profile/profile.component';
+import { CommunityComponent } from './community/community.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProfileComponent, DeleteUserDialog } from './profile/profile.component'
     CreateMapDialog,
     PageNotFoundComponent,
     ProfileComponent,
-    DeleteUserDialog
+    DeleteUserDialog,
+    CommunityComponent
   ],
   imports: [
     BrowserModule,

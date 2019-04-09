@@ -8,22 +8,24 @@
 }
 
 .signup-card {
-  width: 420px;
+  width: 560px;
   height: inherit;
   max-width: 90%;
-  margin-top: 2%;
-  padding: 2%;
+  padding: 3%;
   margin-left: auto;
   margin-right: auto;
 }
 
 .signup-card > * {
-  margin: auto;
-  width: 51%;
-  padding: 2%; 
+  width: 50%;
+  padding: 3%; 
 }
 
 @media only screen and (max-width: 600px) {
+  .signup-card {
+    margin-top: 20%;
+  }
+
   .signup-card > * {
     margin: auto;
     width: 70%;

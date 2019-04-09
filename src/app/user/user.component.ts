@@ -23,6 +23,8 @@ export interface DialogData {
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
+  isUpdate: boolean = false;
+  loading: boolean = false;
   id: string;
   mapName: string;
   maps: Map[] = [];
@@ -35,6 +37,7 @@ export class UserComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
+    public snackBar: MatSnackBar,
     public dialog: MatDialog,
     private router: Router,
     private userService: UserService,
@@ -59,8 +62,28 @@ export class UserComponent implements OnInit, OnDestroy {
     }
   }
 
-  onChangeIsVisible(id, element): void {
-    console.log(id, element);
+  isVisibleOnChange(row, element): void {
+    this.isUpdate = true;
+    this.loading = true;
+    
+    let map = new Map();
+    map.id = row.id;
+    map.isVisible = element.checked;
+    this.userService.saveMap(map)
+      .subscribe(
+        () => {
+          this.loading = false;
+          this.isUpdate = false;
+          this.snackBar.open("Update successfully!", "OK", {
+            duration: 2000
+          });
+        },
+        error => {
+          this.loading = false;
+          this.snackBar.open(error.error.error, "OK", {
+            duration: 2000
+          });
+        });
   }
 
   editMap(id): void {
@@ -168,8 +191,9 @@ export class CreateMapDialog {
     map.name = this.data.mapName;
     map.createDate = createDate;
     map.editDate = createDate;
-    map.isVisible = true;
+    map.isVisible = false;
     map.img = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // The Tiniest Gif Ever
+
     this.userService.createMap(map)
       .subscribe(
         data => {

@@ -1,13 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'materialize.css';
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 // deeppurple-amber.css
 // indigo-pink.css
 // pink-bluegrey.css
 // purple-green.css
 *, *:before, *:after { 
   // font-family: Roboto, Arial, sans-serif;
-  font-family: 100%,'Monda', sans-serif;
+  font-family: Roboto,'Monda', sans-serif;
   box-sizing: initial;
   margin: 0;
 }

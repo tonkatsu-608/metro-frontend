@@ -9,7 +9,6 @@ import { MaterialModule } from './material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppComponent } from './app.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
 import { NavComponent } from './nav/nav.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -26,7 +25,6 @@ import { CommunityComponent } from './community/community.component';
 @NgModule({
   declarations: [
     AppComponent,
-    SidenavComponent,
     NavComponent,
     LoginComponent,
     DashboardComponent,

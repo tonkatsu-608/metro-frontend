@@ -12,8 +12,6 @@
     <div class="row">
       <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
         <input type="hidden" formControlName="$key">
-
-
         <div class="col l12 s12">
           <mat-form-field class="form-field">
             <input formControlName="email" matInput placeholder="Enter your email" required>

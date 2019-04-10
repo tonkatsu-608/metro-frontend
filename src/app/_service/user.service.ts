@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
@@ -11,14 +11,20 @@ export class UserService {
 
   signup(user: User) {
     const body = {
+      role: "user",
+      enabled: true,
       email: user.email,
       password: user.password,
-      firstname: user.firstname,
       lastname: user.lastname,
-      role: "user",
-      enabled: true
+      firstname: user.firstname,
+      avatar: "src/assets/images/avatar-0.jpg"
     }
+
     return this.http.post(this.rootUrl + `/metro/auth/signup`, body);
+  }
+
+  getUser(id: string) {
+    return this.http.get<User>(this.rootUrl + `/metro/api/v1/user/` + id);
   }
 
   getUsers() {
@@ -27,22 +33,6 @@ export class UserService {
 
   getMaps(uid: string) {
     return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/user/${uid}/maps/`);
-  }
-
-  getMap(id: string) {
-    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
-  }
-
-  createMap(map: Map) {
-    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
-  }
-
-  saveMap(map: Map) {
-    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
-  }
-
-  deleteMap(id: string) {
-    return this.http.delete(this.rootUrl + `/metro/api/v1/map/delete/` + id);
   }
 
   verifyPassword(password: string, id: string) {

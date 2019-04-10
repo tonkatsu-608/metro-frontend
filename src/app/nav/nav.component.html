@@ -1,9 +1,13 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="mat-elevation-z5">
   <mat-toolbar-row>
-    <span class="nav-img-span">
+    <span class="nav-img-span pointer" [routerLink]="['/community']">
       <img class="nav-img" src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
     <span class="example-spacer"></span>
+
+    <button class="nav-btn" mat-raised-button [routerLink]="['/community']" matTooltip="Community">
+      <mat-icon class="nav-icon pointer">home</mat-icon>
+    </button>
 
     <button class="nav-btn" mat-raised-button [routerLink]="['/dashboard']" matTooltip="Dashboard">
       <mat-icon class="nav-icon pointer">dashboard</mat-icon>
@@ -16,19 +20,25 @@
     <mat-menu #menu="matMenu">
       <mat-card *ngIf="currentUser">
         <mat-card-header class="sidenav-card-hrader">
-          <div mat-card-avatar class="example-header-image"></div>
+          <div mat-card-avatar class="avatar"></div>
           <mat-card-title class="sidenav-card-title">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
           <mat-card-subtitle class="sidenav-card-title">{{currentUser.email}}</mat-card-subtitle>
         </mat-card-header>
       </mat-card>
-      <button mat-menu-item class="sidenav-card-btn" [routerLink]="['/profile']">
-        <mat-icon>account_box</mat-icon>
-        <span>Profile</span>
-      </button>
-      <button mat-menu-item class="sidenav-card-btn" (click)="logout()">
-        <mat-icon>input</mat-icon>
-        <span>Log out</span>
-      </button>
+      <mat-list role="list">
+        <mat-list-item role="listitem">
+          <button mat-menu-item [routerLink]="['/profile']">
+            <mat-icon>account_box</mat-icon>
+            <span>Profile</span>
+          </button>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>input</mat-icon>
+            <span>Log out</span>
+          </button>
+        </mat-list-item>
+      </mat-list>
     </mat-menu>
 
   </mat-toolbar-row>

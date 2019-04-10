@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.authenticationService.updateLocalStoragelUser(data);
           this.ngOnInit();
-          this.snackBar.open("Email updated successfully!", "OK", {
+          this.snackBar.open("email updated successfully", "OK", {
             duration: 4000
           });
         },
@@ -117,7 +117,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.loading = false;
           this.authenticationService.updateLocalStoragelUser(data);
           this.ngOnInit();
-          this.snackBar.open("Name updated successfully!", "OK", {
+          this.snackBar.open("name updated successfully", "OK", {
             duration: 4000
           });
         },
@@ -142,7 +142,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.authenticationService.updateLocalStoragelUser(data);
           this.ngOnInit();
           this.isConfirmed = false;
-          this.snackBar.open("Password updated successfully!", "OK", {
+          this.snackBar.open("password updated successfully", "OK", {
             duration: 4000
           });
         },
@@ -167,11 +167,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.isConfirmed = true;
             this.passwordForm.controls['password'].setValue("");
-            this.snackBar.open("Password verified!", "OK", {
+            this.snackBar.open("password verified", "OK", {
               duration: 4000
             });
           } else {
-            this.snackBar.open("Incorrect password, please try again!", "OK", {
+            this.snackBar.open("incorrect password, please try again", "OK", {
               duration: 4000
             });
           }
@@ -265,10 +265,10 @@ export class DeleteUserDialog {
       .subscribe(
         (data: User) => {
           this.loading = false;
-          if(data.enabled === false) {
+          if (data.enabled === false) {
             this.router.navigate(['/login']).then(() => {
               this.authenticationService.logout();
-              this.snackBar.open("Account deleted!", "OK", {
+              this.snackBar.open("account deleted, good bye :)", "OK", {
                 duration: 4000
               });
             });

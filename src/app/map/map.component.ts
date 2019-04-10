@@ -3,13 +3,15 @@ import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 
 import 'rxjs/add/operator/filter';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
-import { UserService } from '../_service/user.service';
+import { MapService } from '../_service/map.service';
 import { ComponentCanDeactivate } from '../_guard/map.guard';
+import { AuthenticationService } from '../_service/authentication.service';
 
 declare const d3: any;
 declare const Metro: any;
@@ -24,9 +26,12 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   mode: string;
   isSave: boolean;
   isUser: boolean;
+  isOwner = false;
   loading = false;
   currentMap: Map;
   currentUser: User;
+  currentUserSubscription: Subscription;
+
   canvas: HTMLCanvasElement;
   cursorCanvas: HTMLCanvasElement;
 
@@ -49,15 +54,24 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
   constructor(
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private userService: UserService) { }
+    private mapService: MapService,
+    private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
     this.currentMap = new Map();
     this.route.params.subscribe(params => {
-      this.userService.getMap(params['id'])
+      this.mapService.getMap(params['id'])
         .subscribe(
           data => {
             this.currentMap = data;
+            if(this.currentMap.uid !== this.currentUser.id) {
+              this.isOwner = false;
+            } else {
+              this.isOwner = true;
+            }
             this.canvas = d3.select("#myCanvas").node();
             this.cursorCanvas = d3.select("#cursorCanvas").node();
             if (data.data) {
@@ -155,6 +169,10 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     this.metro.waterLineSliderOnChange(element.value);
   }
 
+  downMap() {
+    alert("download functionality is upcoming...");
+  }
+
   saveMap() {
     this.loading = true;
 
@@ -166,14 +184,14 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
     map.isVisible = this.currentMap.isVisible;
     map.data = this.convertGraphics2Object(this.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
-    console.log("saving map...", map);
+    // console.log("saving map...", map);
 
-    this.userService.saveMap(map)
+    this.mapService.saveMap(map)
       .subscribe(
         () => {
           this.loading = false;
           this.isSave = true;
-          this.snackBar.open("Save successfully!", "OK", {
+          this.snackBar.open("save map successfully", "OK", {
             duration: 4000
           });
         },

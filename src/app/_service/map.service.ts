@@ -1,30 +1,31 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Map } from '../_model/map.model';
 
 @Injectable({ providedIn: 'root' })
 export class MapService {
-  private currentUMapSubject: BehaviorSubject<Map>;
-  public currentMap: Observable<Map>;
+  private rootUrl = `http://localhost:3000`;
 
-  constructor(private http: HttpClient) {
-    this.currentUMapSubject = new BehaviorSubject<Map>(JSON.parse(localStorage.getItem('currentMap')));
-    this.currentMap = this.currentUMapSubject.asObservable();
+  constructor(private http: HttpClient) { }
+
+  getMap(id: string) {
+    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
   }
 
-  public get currentMapValue(): Map {
-    return this.currentUMapSubject.value;
+  getMaps() {
+    return this.http.get<any[]>(this.rootUrl + `/metro/api/v1/maps/`);
   }
 
-  setCurrentMap2LocalStorage(map: Map) {
-    localStorage.setItem('currentMap', JSON.stringify(map));
-    this.currentUMapSubject.next(map);
+  createMap(map: Map) {
+    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
   }
 
-  removeCurrentMapFormLocalStorage() {
-    localStorage.removeItem('currentMap');
-    this.currentUMapSubject.next(null);
+  saveMap(map: Map) {
+    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
+  }
+
+  deleteMap(id: string) {
+    return this.http.delete(this.rootUrl + `/metro/api/v1/map/delete/` + id);
   }
 }

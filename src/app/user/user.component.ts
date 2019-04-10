@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
+import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
 import { AuthenticationService } from '../_service/authentication.service';
 
@@ -27,7 +28,7 @@ export class UserComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   id: string;
   mapName: string;
-  maps: Map[] = [];
+  maps: Map[] = null;
   currentUser: User;
   currentUserSubscription: Subscription;
   displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate', 'isVisible', 'operation'];
@@ -40,6 +41,7 @@ export class UserComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
     private router: Router,
+    private mapService: MapService,
     private userService: UserService,
     private authenticationService: AuthenticationService) { }
 
@@ -69,12 +71,12 @@ export class UserComponent implements OnInit, OnDestroy {
     let map = new Map();
     map.id = row.id;
     map.isVisible = element.checked;
-    this.userService.saveMap(map)
+    this.mapService.saveMap(map)
       .subscribe(
         () => {
           this.loading = false;
           this.isUpdate = false;
-          this.snackBar.open("Update successfully!", "OK", {
+          this.snackBar.open("update map successfully", "OK", {
             duration: 2000
           });
         },
@@ -133,7 +135,7 @@ export class DeleteMapDialog {
   loading: boolean = false;
 
   constructor(
-    private userService: UserService,
+    private mapService: MapService,
     public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DeleteMapDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
@@ -144,11 +146,11 @@ export class DeleteMapDialog {
 
   onDelete(): void {
     this.loading = true;
-    this.userService.deleteMap(this.data.id)
+    this.mapService.deleteMap(this.data.id)
       .subscribe(
         data => {
           this.loading = false;
-          this.snackBar.open(this.data.mapName + " delete successfully!", "OK", {
+          this.snackBar.open(this.data.mapName + " delete successfully", "OK", {
             duration: 4000
           });
         },
@@ -173,7 +175,7 @@ export class CreateMapDialog {
 
   constructor(
     private router: Router,
-    private userService: UserService,
+    private mapService: MapService,
     public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<CreateMapDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
@@ -194,12 +196,12 @@ export class CreateMapDialog {
     map.isVisible = false;
     map.img = "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="; // The Tiniest Gif Ever
 
-    this.userService.createMap(map)
+    this.mapService.createMap(map)
       .subscribe(
         data => {
           this.loading = false;
           this.router.navigate(['/map/' + data]);
-          this.snackBar.open(this.data.mapName + " created successfully!", "OK", {
+          this.snackBar.open(this.data.mapName + " created successfully", "OK", {
             duration: 4000
           });
         },

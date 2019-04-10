@@ -122,7 +122,13 @@
     </canvas>
   </div>
   <div class="example-button-row">
-    <button mat-fab class="save-btn" color="accent" matTooltip="Save Map" (click)="saveMap()" [disabled]="loading">
+    <button mat-fab *ngIf="!isOwner" class="save-btn" color="accent" matTooltip="download map" (click)="downMap()"
+      [disabled]="loading">
+      <mat-icon aria-label="download map">get_app</mat-icon>
+    </button>
+
+    <button mat-fab *ngIf="isOwner" class="save-btn" color="accent" matTooltip="save map" (click)="saveMap()"
+      [disabled]="loading">
       <mat-icon aria-label="save map">save</mat-icon>
     </button>
   </div>

@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         data => {
           this.router.navigate([this.returnUrl]).then(() => {
-            this.snackBar.open("Welcome back! " + data.user.firstname, "OK", {
+            this.snackBar.open("welcome back, " + data.user.firstname, "OK", {
               duration: 4000
             });
           });
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/login']).then(() => {
             if(error) {
               this.snackBar.open(error.error.msg, "OK", {
-                duration: 5000
+                duration: error.error.status === 'invalid' ? 5000 : 60000
               });
             }
           });;

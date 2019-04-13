@@ -1,26 +1,49 @@
-<mat-toolbar color="primary" class="mat-elevation-z5">
+<mat-toolbar color="primary" class="mat-elevation-z6">
   <mat-toolbar-row>
     <span class="nav-img-span pointer" [routerLink]="['/community']">
       <img class="nav-img" src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
     <span class="example-spacer"></span>
 
-    <button class="nav-btn" mat-raised-button [routerLink]="['/community']" matTooltip="Community">
-      <mat-icon class="nav-icon pointer">home</mat-icon>
+    <button class="nav-btn" mat-icon-button [routerLink]="['/community']" matTooltip="Community"
+      matTooltipClass="tooltip-black">
+      <mat-icon class="pointer">home</mat-icon>
     </button>
 
-    <button class="nav-btn" mat-raised-button [routerLink]="['/dashboard']" matTooltip="Dashboard">
-      <mat-icon class="nav-icon pointer">dashboard</mat-icon>
+    <button class="nav-btn" mat-icon-button [routerLink]="['/dashboard']" matTooltip="Dashboard"
+      matTooltipClass="tooltip-black">
+      <mat-icon class="pointer">dashboard</mat-icon>
     </button>
 
-    <button class="nav-btn" mat-raised-button [matMenuTriggerFor]="menu">
-      <mat-icon class="nav-icon pointer">person</mat-icon>
+    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="theme" matTooltip="THeme"
+      matTooltipClass="tooltip-black">
+      <mat-icon class="pointer">format_color_fill</mat-icon>
     </button>
+
+    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Profile"
+      matTooltipClass="tooltip-black">
+      <mat-icon class="pointer">account_circle</mat-icon>
+    </button>
+
+    <mat-menu #theme="matMenu">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>voicemail</mat-icon>
+          <span>Check voicemail</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>notifications_off</mat-icon>
+          <span>Disable alerts</span>
+        </button>
+      </mat-menu>
 
     <mat-menu #menu="matMenu">
       <mat-card *ngIf="currentUser">
         <mat-card-header class="sidenav-card-hrader">
-          <div mat-card-avatar class="avatar"></div>
+          <div mat-card-avatar class="avatar pointer mat-elevation-z2" [routerLink]="['/profile']"></div>
           <mat-card-title class="sidenav-card-title">{{currentUser.firstname}} {{currentUser.lastname}}</mat-card-title>
           <mat-card-subtitle class="sidenav-card-title">{{currentUser.email}}</mat-card-subtitle>
         </mat-card-header>
@@ -30,6 +53,12 @@
           <button mat-menu-item [routerLink]="['/profile']">
             <mat-icon>account_box</mat-icon>
             <span>Profile</span>
+          </button>
+        </mat-list-item>
+        <mat-list-item role="listitem">
+          <button mat-menu-item [routerLink]="['/settings']">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
           </button>
         </mat-list-item>
         <mat-list-item role="listitem">

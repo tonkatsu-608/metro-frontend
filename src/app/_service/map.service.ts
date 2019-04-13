@@ -13,8 +13,8 @@ export class MapService {
     return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
   }
 
-  getMaps() {
-    return this.http.get<any[]>(this.rootUrl + `/metro/api/v1/maps/`);
+  getMaps(page: number, limit: number) {
+    return this.http.get<any[]>(this.rootUrl + `/metro/api/v1/maps/?page=` + page + `&limit=` + limit);
   }
 
   createMap(map: Map) {

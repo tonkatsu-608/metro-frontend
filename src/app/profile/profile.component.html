@@ -8,7 +8,7 @@
         <mat-card-header class="profile-backgound" [ngStyle]="{'background-image': getBackground()}"
           (mouseenter)="isBgEnter = true" (mouseleave)="isBgEnter = false">
           <button mat-icon-button class="mat-elevation-z1 bg-camera-btn" *ngIf="isBgEnter" type="button"
-            matTooltip="upload background image">
+            matTooltip="Upload background image" matTooltipClass="tooltip-black">
             <mat-icon>camera_alt</mat-icon>
           </button>
         </mat-card-header>
@@ -16,7 +16,7 @@
         <mat-card-header class="profile-header">
           <div class="profile-avatar center" (mouseenter)="isEnter = true" (mouseleave)="isEnter = false">
             <button mat-icon-button class="mat-elevation-z1 avatar-camera-btn" *ngIf="isEnter" type="button"
-              matTooltip="upload avatar">
+              matTooltip="Upload avatar" matTooltipClass="tooltip-black">
               <mat-icon>camera_alt</mat-icon>
             </button>
             <img mat-card-avatar src="assets/images/avatar-0.jpg" class="avatar mat-elevation-z2" />
@@ -35,8 +35,8 @@
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Email
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="update email"
-                  *ngIf="emailForm.valid && isEmailChanged">
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="Update email"
+                  matTooltipClass="tooltip-black" *ngIf="emailForm.valid && isEmailChanged">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>
@@ -56,7 +56,8 @@
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Password
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="verify">
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="Verify"
+                  matTooltipClass="tooltip-black">
                   <mat-icon>arrow_forward</mat-icon>
                 </button>
               </mat-card-header>
@@ -76,12 +77,12 @@
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Password
-                <button mat-icon-button class="update-btn" type="button" matTooltip="go back"
-                  (click)="isConfirmed = false">
+                <button mat-icon-button class="update-btn" type="button" matTooltip="Go back"
+                  matTooltipClass="tooltip-black" (click)="isConfirmed = false">
                   <mat-icon>arrow_back</mat-icon>
                 </button>
-                <button mat-icon-button class="change-password-btn" type="submit" matTooltip="change password"
-                  *ngIf="confirmPasswordForm.valid">
+                <button mat-icon-button class="change-password-btn" type="submit" matTooltip="Change password"
+                  matTooltipClass="tooltip-black" *ngIf="confirmPasswordForm.valid">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>
@@ -114,8 +115,8 @@
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
                 Change Name
-                <button mat-icon-button class="update-btn" type="submit" matTooltip="update name"
-                  *ngIf="nameForm.valid && isNameChanged">
+                <button mat-icon-button class="update-btn" type="submit" matTooltip="Update name"
+                  matTooltipClass="tooltip-black" *ngIf="nameForm.valid && isNameChanged">
                   <mat-icon>refresh</mat-icon>
                 </button>
               </mat-card-header>

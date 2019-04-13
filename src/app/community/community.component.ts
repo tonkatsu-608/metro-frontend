@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatPaginator, MatSort, PageEvent } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
@@ -19,12 +19,14 @@ import { AuthenticationService } from '../_service/authentication.service';
 })
 export class CommunityComponent implements OnInit {
   loading: boolean = false;
-  maps: any[] = [];
+  maps: any[] = null;
+  length = 0;
+  pageIndex = 0;
+  pageSize = 3;
+  pageSizeOptions: number[] = [3, 6, 9, 12];
   displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate', 'isVisible', 'operation'];
-  dataSource: MatTableDataSource<Map>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     public snackBar: MatSnackBar,
@@ -39,9 +41,10 @@ export class CommunityComponent implements OnInit {
   }
 
   refresh(): void {
-    this.mapService.getMaps().subscribe(data => {
-      let maps = data;
+    this.mapService.getMaps(this.pageIndex + 1, this.pageSize).subscribe(data => {
+      console.log('data: ', data);
 
+      let maps = data['maps'];
       this.maps = maps.map(m => {
         this.userService.getUser(m.uid).subscribe(user => {
           m.firstname = user.firstname || "";
@@ -50,12 +53,22 @@ export class CommunityComponent implements OnInit {
         });
         return m;
       });
-
-      console.log(this.maps);
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.length = data['mapCount'];
+      this.pageIndex = data['currentPage'] - 1;
     });
+  }
+
+  onPageChange(page) {
+    this.pageIndex = page.pageIndex;
+    this.pageSize = page.pageSize;
+    this.refresh();
+  }
+
+  applyFilter(filterValue: string) {
+    // this.maps.filter = filterValue.trim().toLowerCase();
+    // if (this.maps.paginator) {
+    //   this.maps.paginator.firstPage();
+    // }
   }
 
   viewMap(id): void {

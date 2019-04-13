@@ -1,16 +1,14 @@
 @import 'materialize.css';
+@import '~@angular/material/theming';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+@include mat-core();
+
 @import 'themes/default-theme.scss';
 @import 'themes/light-theme.scss';
 @import 'themes/black-theme.scss';
 @import 'themes/nature-theme.scss';
-@import '~@angular/material/theming';
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-// deeppurple-amber.css
-// indigo-pink.css
-// pink-bluegrey.css
-// purple-green.css
 
-@include mat-core();
 
 .default-theme {
   @include angular-material-theme($app-theme);

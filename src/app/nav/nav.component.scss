@@ -1,11 +1,12 @@
 .nav-img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: auto;
   margin-top: 3%;
+  max-width: 282px;
+  max-height: 40px;
 }
-
-.nav-icon {
-  padding: 0 3%;
+.nav-btn {
+  margin: 0;
 }
 
 .example-spacer {
@@ -18,10 +19,11 @@
 }
 
 .avatar {
-  background-image: url('src/assets/images/avatar-0.jpg');
+  width: 50px;
+  height: 50px;
+  background-image: url("src/assets/images/avatar-0.jpg");
   background-size: cover;
 }
 
-.nav-btn {
-  margin: 1%;
+@media only screen and (max-width: 600px) {
 }

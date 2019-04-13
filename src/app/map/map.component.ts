@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ declare const Metro: any;
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
-export class MapComponent implements OnInit, ComponentCanDeactivate {
+export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   metro: any;
   mode: string;
   isSave: boolean;
@@ -87,6 +87,11 @@ export class MapComponent implements OnInit, ComponentCanDeactivate {
             });
           });
     });
+  }
+
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.currentUserSubscription.unsubscribe();
   }
 
   // new graphics

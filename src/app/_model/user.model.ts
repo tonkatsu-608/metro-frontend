@@ -8,4 +8,16 @@ export class User {
   role: string;
   enabled: boolean;
   data: object;
+
+  // constructor(
+  //   public id: string,
+  //   public avatar: any,
+  //   public email: string,
+  //   public firstname: string,
+  //   public lastname: string,
+  //   public password: string,
+  //   public role: string,
+  //   public enabled: boolean,
+  //   public data: object
+  // ) { }
 }

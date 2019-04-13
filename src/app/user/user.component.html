@@ -6,13 +6,21 @@
     <mat-hint>email, firstname, lastname...</mat-hint>
   </mat-form-field>
 </p> -->
-
-<div class="center" *ngIf="!maps">
-  <mat-spinner class="center loading-spinner" color="accent"></mat-spinner>
+<div class="center loading-spinner" *ngIf="!maps">
+  <h6>Loading data...</h6>
+  <mat-spinner class="center" color="accent"></mat-spinner>
 </div>
 
 <div class="center" *ngIf="maps && maps.length === 0">
-    No Records Found!
+  <mat-card class="loading-spinner">
+    <h4>You don't have any map</h4>
+    <h4>Go
+      <button mat-raised-button color="accent" matTooltip="Create Map" matTooltipClass="tooltip-black"
+        (click)="openCreateDialog()">
+        <h4>Create</h4>
+      </button>
+      one</h4>
+  </mat-card>
 </div>
 
 <div *ngIf="maps && maps.length !== 0">
@@ -21,8 +29,7 @@
   </mat-form-field>
 
   <div class="mat-elevation-z8">
-    <mat-progress-bar *ngIf="loading" color="accent" mode="indeterminate"></mat-progress-bar>
-
+    <!-- <mat-progress-bar *ngIf="loading" color="accent" mode="indeterminate"></mat-progress-bar> -->
     <table mat-table [dataSource]="dataSource" matSort>
 
       <!-- Name Column -->
@@ -66,13 +73,15 @@
       <ng-container matColumnDef="operation">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Operation </th>
         <td mat-cell *matCellDef="let row">
-          <button class="operation-btn" mat-icon-button (click)="editMap(row.id)" matTooltip="edit">
+          <button class="operation-btn" mat-icon-button (click)="editMap(row.id)" matTooltip="Edit"
+            matTooltipClass="tooltip-black">
             <mat-icon aria-label="edit" class="example-icon">edit</mat-icon>
           </button>
-          <button class="operation-btn" mat-icon-button (click)="openDeleteDialog(row.id,row.name)" matTooltip="delete">
+          <button class="operation-btn" mat-icon-button (click)="openDeleteDialog(row.id,row.name)" matTooltip="Delete"
+            matTooltipClass="tooltip-black">
             <mat-icon aria-label="delete" class="example-icon">delete</mat-icon>
           </button>
-          <button class="operation-btn" mat-icon-button matTooltip="download">
+          <button class="operation-btn" mat-icon-button matTooltip="Download" matTooltipClass="tooltip-black">
             <mat-icon aria-label="download" class="example-icon">get_app</mat-icon>
           </button>
         </td>
@@ -87,7 +96,8 @@
 </div>
 
 <div class="example-button-row">
-  <button mat-fab class="create-btn" color="accent" matTooltip="Create Map" (click)="openCreateDialog()">
+  <button mat-fab class="create-btn" color="accent" matTooltip="Create Map" matTooltipClass="tooltip-black"
+    (click)="openCreateDialog()">
     <mat-icon aria-label="create a map">add</mat-icon>
   </button>
 </div>

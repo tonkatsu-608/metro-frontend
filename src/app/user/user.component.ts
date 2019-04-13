@@ -67,7 +67,7 @@ export class UserComponent implements OnInit, OnDestroy {
   isVisibleOnChange(row, element): void {
     this.isUpdate = true;
     this.loading = true;
-    
+
     let map = new Map();
     map.id = row.id;
     map.isVisible = element.checked;
@@ -79,12 +79,14 @@ export class UserComponent implements OnInit, OnDestroy {
           this.snackBar.open("update map successfully", "OK", {
             duration: 2000
           });
+          this.refresh();
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error.error, "OK", {
             duration: 2000
           });
+          this.refresh();
         });
   }
 

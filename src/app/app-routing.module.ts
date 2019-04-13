@@ -12,7 +12,6 @@ import { MapGuard } from './_guard/map.guard';
 import { AuthGuard } from './_guard/auth.guard';
 import { UserGuard } from './_guard/user.guard';
 
-
 const routes: Routes = [
   { path: '',  redirectTo: '/community', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },

@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
+import { ThemeService } from '../_service/theme.service';
 import { AuthenticationService } from '../_service/authentication.service';
 
 @Component({
@@ -13,11 +15,14 @@ import { AuthenticationService } from '../_service/authentication.service';
 })
 
 export class NavComponent implements OnInit, OnDestroy {
+  currentTheme: string;
+  currentThemeSubscription: Subscription;
   currentUser: User;
   currentUserSubscription: Subscription;
 
   constructor(
     private router: Router,
+    private themeService: ThemeService,
     private authenticationService: AuthenticationService,
     public snackBar: MatSnackBar) {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
@@ -26,11 +31,22 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.currentThemeSubscription = this.themeService.theme.subscribe(t => {
+      this.currentTheme = t === null ? 'default' : t;
+    });
   }
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.currentUserSubscription.unsubscribe();
+    this.currentThemeSubscription.unsubscribe();
+  }
+
+  onChangeTheme(theme: string) {
+    this.themeService.setTheme(theme);
+    this.currentThemeSubscription = this.themeService.theme.subscribe(t => {
+      this.currentTheme = t;
+    });
   }
 
   logout() {

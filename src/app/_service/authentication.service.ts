@@ -25,7 +25,7 @@ export class AuthenticationService {
         // login successful if there's a jwt token in the response
         // if (user && user.token) {
         if (data.user) {
-          delete data.user.password;
+          if(data.user.hasOwnProperty('password')) delete data.user.password;
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify(data.user));
           this.currentUserSubject.next(data.user);

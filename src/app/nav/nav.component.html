@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
-  <mat-toolbar-row>
+  <mat-toolbar-row class="toolbar">
     <span class="nav-img-span pointer" [routerLink]="['/community']">
       <img class="nav-img" src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
@@ -7,38 +7,48 @@
 
     <button class="nav-btn" mat-icon-button [routerLink]="['/community']" matTooltip="Community"
       matTooltipClass="tooltip-black">
-      <mat-icon class="pointer">home</mat-icon>
+      <mat-icon class="md-24 pointer">home</mat-icon>
     </button>
 
     <button class="nav-btn" mat-icon-button [routerLink]="['/dashboard']" matTooltip="Dashboard"
       matTooltipClass="tooltip-black">
-      <mat-icon class="pointer">dashboard</mat-icon>
+      <mat-icon class="md-24 pointer">dashboard</mat-icon>
     </button>
 
-    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="theme" matTooltip="THeme"
+    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="theme" matTooltip="Theme"
       matTooltipClass="tooltip-black">
-      <mat-icon class="pointer">format_color_fill</mat-icon>
+      <mat-icon class="md-24 pointer">format_color_fill</mat-icon>
     </button>
 
-    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Profile"
-      matTooltipClass="tooltip-black">
-      <mat-icon class="pointer">account_circle</mat-icon>
+    <button class="nav-btn" mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon class="md-24 pointer">account_circle</mat-icon>
     </button>
 
     <mat-menu #theme="matMenu">
-        <button mat-menu-item>
-          <mat-icon>dialpad</mat-icon>
-          <span>Redial</span>
-        </button>
-        <button mat-menu-item disabled>
-          <mat-icon>voicemail</mat-icon>
-          <span>Check voicemail</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>notifications_off</mat-icon>
-          <span>Disable alerts</span>
-        </button>
-      </mat-menu>
+      <button mat-menu-item color="accent" [disabled]="currentTheme === 'default'" (click)="onChangeTheme('default')">
+        <mat-icon aria-label="light theme">brightness_5</mat-icon>
+        <span>Default Theme</span>
+        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'default'" [ngStyle]="{'color': greenyellow}">check</mat-icon>
+      </button>
+
+      <button mat-menu-item color="accent" [disabled]="currentTheme === 'nature'" (click)="onChangeTheme('nature')">
+        <mat-icon aria-label="light theme">brightness_6</mat-icon>
+        <span>Nature Theme</span>
+        <mat-icon class="check" aria-label="check" *ngIf="currentTheme ==='nature'">check</mat-icon>
+      </button>
+
+      <button mat-menu-item color="accent" [disabled]="currentTheme === 'light'" (click)="onChangeTheme('light')">
+        <mat-icon aria-label="light theme">brightness_7</mat-icon>
+        <span>Light Theme</span>
+        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'light'">check</mat-icon>
+      </button>
+
+      <button mat-menu-item color="accent" [disabled]="currentTheme === 'dark'" (click)="onChangeTheme('dark')">
+        <mat-icon aria-label="light theme">brightness_4</mat-icon>
+        <span>Dark Theme</span>
+        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'dark'">check</mat-icon>
+      </button>
+    </mat-menu>
 
     <mat-menu #menu="matMenu">
       <mat-card *ngIf="currentUser">

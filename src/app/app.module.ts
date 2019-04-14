@@ -21,6 +21,7 @@ import { MapGuard } from './_guard/map.guard';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent, DeleteUserDialog } from './profile/profile.component';
 import { CommunityComponent } from './community/community.component';
+import { ThemeService } from './_service/theme.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,7 @@ import { CommunityComponent } from './community/community.component';
     ReactiveFormsModule,
     DragDropModule
   ],
-  providers: [UserService, MapGuard],
+  providers: [UserService, ThemeService, MapGuard],
   bootstrap: [AppComponent],
   entryComponents: [CreateMapDialog, DeleteMapDialog, DeleteUserDialog]
 })

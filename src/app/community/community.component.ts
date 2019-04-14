@@ -1,16 +1,13 @@
-import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { MatPaginator, MatSort, PageEvent } from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { MatPaginator } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
-import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
 import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
-import { AuthenticationService } from '../_service/authentication.service';
 
 @Component({
   selector: 'app-community',
@@ -33,8 +30,7 @@ export class CommunityComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private mapService: MapService,
-    private userService: UserService,
-    private authenticationService: AuthenticationService) { }
+    private userService: UserService) { }
 
   ngOnInit() {
     this.refresh();
@@ -42,8 +38,6 @@ export class CommunityComponent implements OnInit {
 
   refresh(): void {
     this.mapService.getMaps(this.pageIndex + 1, this.pageSize).subscribe(data => {
-      console.log('data: ', data);
-
       let maps = data['maps'];
       this.maps = maps.map(m => {
         this.userService.getUser(m.uid).subscribe(user => {
@@ -53,6 +47,7 @@ export class CommunityComponent implements OnInit {
         });
         return m;
       });
+
       this.length = data['mapCount'];
       this.pageIndex = data['currentPage'] - 1;
     });
@@ -65,6 +60,7 @@ export class CommunityComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
+    console.log(filterValue);
     // this.maps.filter = filterValue.trim().toLowerCase();
     // if (this.maps.paginator) {
     //   this.maps.paginator.firstPage();

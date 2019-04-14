@@ -1,5 +1,5 @@
-<div class="wrapper">
-  <div class="content">
+<div class="wrapper" [ngClass]="theme === undefined ? '' : theme + '-theme'">
+  <div class="content mat-app-background">
     <router-outlet></router-outlet>
   </div>
 
@@ -8,7 +8,7 @@
       <mat-toolbar-row>
         <div class="row">
           <div class="col l12 m12 s12">
-            &#169; <span>{{year}}</span> - Shizheng Yang
+              <span>&#169; {{year}} - Shizheng Yang</span>
           </div>
         </div>
       </mat-toolbar-row>

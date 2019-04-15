@@ -26,27 +26,27 @@
 
     <mat-menu #theme="matMenu">
       <button mat-menu-item color="accent" [disabled]="currentTheme === 'default'" (click)="onChangeTheme('default')">
-        <mat-icon aria-label="light theme">brightness_5</mat-icon>
+        <mat-icon aria-label="default theme">brightness_5</mat-icon>
         <span>Default Theme</span>
-        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'default'" [ngStyle]="{'color': greenyellow}">check</mat-icon>
+        <mat-icon aria-label="check" *ngIf="currentTheme === 'default'" [ngStyle]="{'color': 'green'}">check</mat-icon>
       </button>
 
+      <button mat-menu-item color="accent" [disabled]="currentTheme === 'dark'" (click)="onChangeTheme('dark')">
+          <mat-icon aria-label="dark theme">brightness_4</mat-icon>
+          <span>Dark Theme</span>
+          <mat-icon aria-label="check" *ngIf="currentTheme === 'dark'" [ngStyle]="{'color': 'green'}">check</mat-icon>
+        </button>
+
       <button mat-menu-item color="accent" [disabled]="currentTheme === 'nature'" (click)="onChangeTheme('nature')">
-        <mat-icon aria-label="light theme">brightness_6</mat-icon>
+        <mat-icon aria-label="nature theme">brightness_6</mat-icon>
         <span>Nature Theme</span>
-        <mat-icon class="check" aria-label="check" *ngIf="currentTheme ==='nature'">check</mat-icon>
+        <mat-icon aria-label="check" *ngIf="currentTheme ==='nature'" [ngStyle]="{'color': 'green'}">check</mat-icon>
       </button>
 
       <button mat-menu-item color="accent" [disabled]="currentTheme === 'light'" (click)="onChangeTheme('light')">
         <mat-icon aria-label="light theme">brightness_7</mat-icon>
         <span>Light Theme</span>
-        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'light'">check</mat-icon>
-      </button>
-
-      <button mat-menu-item color="accent" [disabled]="currentTheme === 'dark'" (click)="onChangeTheme('dark')">
-        <mat-icon aria-label="light theme">brightness_4</mat-icon>
-        <span>Dark Theme</span>
-        <mat-icon class="check" aria-label="check" *ngIf="currentTheme === 'dark'">check</mat-icon>
+        <mat-icon aria-label="check" *ngIf="currentTheme === 'light'" [ngStyle]="{'color': 'green'}">check</mat-icon>
       </button>
     </mat-menu>
 

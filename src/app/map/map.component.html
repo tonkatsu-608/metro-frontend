@@ -2,7 +2,25 @@
 <mat-progress-bar *ngIf="loading" color="accent" mode="indeterminate"></mat-progress-bar>
 
 <div class="row">
-  <div class="col l3 s12" right>
+  <div class="col l10 m10 s12" left style="position: relative;">
+    <div class="row">
+      <div class="col l9 m9 s12">
+        <mat-card>
+          it's card
+        </mat-card>
+      </div>
+    </div>
+
+    <canvas id="myCanvas" width="1190" height="800" [style.backgroundColor]="'rgb(203, 197, 185)'">
+      Your browser does not support canvas
+    </canvas>
+
+    <canvas id="cursorCanvas" width="1190" height="800">
+      Your browser does not support canvas
+    </canvas>
+  </div>
+
+  <div class="col l2 m2 s12 operation-panel" right>
     <mat-list>
       <h2 mat-subheader color="warn">render new map</h2>
       <mat-list-item>
@@ -113,24 +131,8 @@
     </mat-list>
   </div>
 
-  <div class="col l9 s12" style="position: relative;">
-    <canvas id="myCanvas" width="1190" height="800" [style.backgroundColor]="'rgb(203, 197, 185)'">
-      Your browser does not support canvas
-    </canvas>
-
-    <canvas id="cursorCanvas" width="1190" height="800">
-      Your browser does not support canvas
-    </canvas>
-  </div>
-  <div class="example-button-row">
-    <button mat-fab *ngIf="!isOwner" class="save-btn" color="accent" matTooltip="Download map"
-      matTooltipClass="tooltip-black" (click)="downMap()" [disabled]="loading">
-      <mat-icon aria-label="download map">get_app</mat-icon>
-    </button>
-
-    <button mat-fab *ngIf="isOwner" class="save-btn" color="accent" matTooltip="Save map"
-      matTooltipClass="tooltip-black" (click)="saveMap()" [disabled]="loading">
-      <mat-icon aria-label="save map">save</mat-icon>
-    </button>
-  </div>
+  <button mat-fab class="save-btn" color="accent" matTooltip="Save/Download" matTooltipClass="tooltip-black"
+    (click)="openBottomSheet()" [disabled]="loading">
+    <mat-icon aria-label="save map">build</mat-icon>
+  </button>
 </div>

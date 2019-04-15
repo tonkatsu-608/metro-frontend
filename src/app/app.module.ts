@@ -16,12 +16,13 @@ import { SignupComponent } from './signup/signup.component';
 import { UserService } from './_service/user.service';
 import { UserComponent, CreateMapDialog, DeleteMapDialog } from './user/user.component';
 import { AdminComponent } from './admin/admin.component';
-import { MapComponent } from './map/map.component';
+import { MapComponent, BottomSheetOperationSheet } from './map/map.component';
 import { MapGuard } from './_guard/map.guard';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProfileComponent, DeleteUserDialog } from './profile/profile.component';
 import { CommunityComponent } from './community/community.component';
 import { ThemeService } from './_service/theme.service';
+import { FilterPipe} from './_pipe/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -33,12 +34,14 @@ import { ThemeService } from './_service/theme.service';
     UserComponent,
     AdminComponent,
     MapComponent,
+    BottomSheetOperationSheet,
     DeleteMapDialog,
     CreateMapDialog,
     PageNotFoundComponent,
     ProfileComponent,
     DeleteUserDialog,
-    CommunityComponent
+    CommunityComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -53,6 +56,6 @@ import { ThemeService } from './_service/theme.service';
   ],
   providers: [UserService, ThemeService, MapGuard],
   bootstrap: [AppComponent],
-  entryComponents: [CreateMapDialog, DeleteMapDialog, DeleteUserDialog]
+  entryComponents: [CreateMapDialog, DeleteMapDialog, DeleteUserDialog, BottomSheetOperationSheet]
 })
 export class AppModule { }

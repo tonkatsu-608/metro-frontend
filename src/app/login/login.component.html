@@ -2,23 +2,25 @@
 
 <div class="login-container">
 	<mat-card class="login-card">
-		<img mat-card-image src="https://fontmeme.com/permalink/180923/7d95b1af3bc6a2edd6b5c31370e73e2d.png"
-			alt="Photo of a Shiba Inu">
-		<mat-card-header>
+		<img mat-card-image src="assets/images/metropolist.png"
+			alt="Metropolist">
+		<mat-card-header class="login-header">
 			<mat-card-title>Log in</mat-card-title>
 			<mat-card-subtitle>to continue to Metropolist</mat-card-subtitle>
 		</mat-card-header>
 
 		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-			<mat-form-field class="form-field">
-				<input matInput required formControlName="email" placeholder="Enter your email">
+			<mat-form-field class="form-field" appearance="outline">
+				<mat-label>Email</mat-label>
+				<input matInput required formControlName="email" placeholder="">
 				<mat-error *ngIf="loginForm.controls['email'].errors?.required">Email is required.</mat-error>
 				<mat-error *ngIf="loginForm.controls['email'].errors?.email">Email should be typed in right format.
 				</mat-error>
 			</mat-form-field>
 
-			<mat-form-field class="form-field">
-				<input matInput required formControlName="password" placeholder="Enter your password"
+			<mat-form-field class="form-field" appearance="outline">
+				<mat-label>Password</mat-label>
+				<input matInput required formControlName="password" placeholder=""
 					[type]="hide ? 'password' : 'text'">
 				<mat-icon matSuffix class="pointer" (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}
 				</mat-icon>
@@ -28,9 +30,8 @@
 				</mat-error>
 			</mat-form-field>
 
-			<a mat-button [routerLink]="['/signup']">Create account</a>
-
 			<mat-card-actions>
+				<a [routerLink]="['/signup']">Create account</a>
 				<button mat-raised-button color="primary" [disabled]="loginForm.invalid || loading" type="submit">
 					Log in
 				</button>

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { formatDate } from '@angular/common';
-import { MatSnackBar } from '@angular/material';
+import { Component, OnInit, OnDestroy, HostListener, Inject } from '@angular/core';
+import { MatSnackBar, MatBottomSheet, MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { formatDate } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs';
 
@@ -16,6 +16,13 @@ import { AuthenticationService } from '../_service/authentication.service';
 declare const d3: any;
 declare const Metro: any;
 
+export interface OperationSheetData {
+  metro: any,
+  canvas: any,
+  currentMap: any,
+  currentUser: any,
+}
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -24,10 +31,9 @@ declare const Metro: any;
 export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   metro: any;
   mode: string;
-  isSave: boolean;
-  isUser: boolean;
-  isOwner = false;
   loading = false;
+  isUser: boolean;
+  isSaved: boolean;
   currentMap: Map;
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -55,6 +61,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private mapService: MapService,
+    private bottomSheet: MatBottomSheet,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
@@ -67,11 +74,6 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
         .subscribe(
           data => {
             this.currentMap = data;
-            if(this.currentMap.uid !== this.currentUser.id) {
-              this.isOwner = false;
-            } else {
-              this.isOwner = true;
-            }
             this.canvas = d3.select("#myCanvas").node();
             this.cursorCanvas = d3.select("#cursorCanvas").node();
             if (data.data) {
@@ -174,20 +176,243 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     this.metro.waterLineSliderOnChange(element.value);
   }
 
-  downMap() {
-    alert("download functionality is upcoming...");
+  openBottomSheet(): void {
+    const bottomSheetRef = this.bottomSheet.open(BottomSheetOperationSheet, {
+      data: {
+        isSaved: this.isSaved,
+        metro: this.metro,
+        canvas: this.canvas,
+        currentMap: this.currentMap,
+        currentUser: this.currentUser,
+      },
+    });
+    bottomSheetRef.afterDismissed().subscribe(result => {
+      if (!result) {
+        this.isSaved = false;
+      } else {
+        this.isSaved = result.isSaved;
+      }
+    });
+  }
+
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      this.newGraphics();
+    }
+  }
+
+  // @HostListener allows us to also guard against browser refresh, close, etc.
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    // insert logic to check if there are pending changes here;
+    // returning true will navigate without confirmation
+    // returning false will show a confirm dialog before navigating away
+    if (this.isSaved) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
+@Component({
+  selector: 'bottom-sheet-operation-sheet',
+  templateUrl: 'bottom-sheet-operation-sheet.html',
+})
+export class BottomSheetOperationSheet implements OnInit {
+  loading: boolean;
+  isOwner = false;
+  CanvasToBMP = {
+    /**
+     * Convert a canvas element to ArrayBuffer containing a BMP file
+     * with support for 32-bit (alpha).
+     *
+     * Note that CORS requirement must be fulfilled.
+     *
+     * @param {HTMLCanvasElement} canvas - the canvas element to convert
+     * @return {ArrayBuffer}
+     */
+    toArrayBuffer: function (canvas) {
+
+      let w = canvas.width,
+        h = canvas.height,
+        w4 = w * 4,
+        idata = canvas.getContext("2d").getImageData(0, 0, w, h),
+        data32 = new Uint32Array(idata.data.buffer), // 32-bit representation of canvas
+
+        stride = Math.floor((32 * w + 31) / 32) * 4, // row length incl. padding
+        pixelArraySize = stride * h,                 // total bitmap size
+        fileLength = 122 + pixelArraySize,           // header size is known + bitmap
+
+        file = new ArrayBuffer(fileLength),          // raw byte buffer (returned)
+        view = new DataView(file),                   // handle endian, reg. width etc.
+        pos = 0, x, y = 0, p, s = 0, a, v;
+
+      // write file header
+      setU16(0x4d42);          // BM
+      setU32(fileLength);      // total length
+      pos += 4;                // skip unused fields
+      setU32(0x7a);            // offset to pixels
+
+      // DIB header
+      setU32(108);             // header size
+      setU32(w);
+      setU32(-h >>> 0);        // negative = top-to-bottom
+      setU16(1);               // 1 plane
+      setU16(32);              // 32-bits (RGBA)
+      setU32(3);               // no compression (BI_BITFIELDS, 3)
+      setU32(pixelArraySize);  // bitmap size incl. padding (stride x height)
+      setU32(2835);            // pixels/meter h (~72 DPI x 39.3701 inch/m)
+      setU32(2835);            // pixels/meter v
+      pos += 8;                // skip color/important colors
+      setU32(0xff0000);        // red channel mask
+      setU32(0xff00);          // green channel mask
+      setU32(0xff);            // blue channel mask
+      setU32(0xff000000);      // alpha channel mask
+      setU32(0x57696e20);      // " win" color space
+
+      // bitmap data, change order of ABGR to BGRA
+      while (y < h) {
+        p = 0x7a + y * stride; // offset + stride x height
+        x = 0;
+        while (x < w4) {
+          v = data32[s++];                     // get ABGR
+          a = v >>> 24;                        // alpha channel
+          view.setUint32(p + x, (v << 8) | a); // set BGRA
+          x += 4;
+        }
+        y++
+      }
+      return file;
+
+      // helper method to move current buffer position
+      function setU16(data) { view.setUint16(pos, data, true); pos += 2 }
+      function setU32(data) { view.setUint32(pos, data, true); pos += 4 }
+    },
+
+    /**
+     * Converts a canvas to BMP file, returns a Blob representing the
+     * file. This can be used with URL.createObjectURL().
+     * Note that CORS requirement must be fulfilled.
+     *
+     * @param {HTMLCanvasElement} canvas - the canvas element to convert
+     * @return {Blob}
+     */
+    toBlob: function (canvas) {
+      return new Blob([this.toArrayBuffer(canvas)], {
+        type: "image/bmp"
+      });
+    },
+
+    /**
+     * Converts the canvas to a data-URI representing a BMP file.
+     * Note that CORS requirement must be fulfilled.
+     *
+     * @param canvas
+     * @return {string}
+     */
+    toDataURL: function (canvas) {
+      var buffer = new Uint8Array(this.toArrayBuffer(canvas)),
+        bs = "", i = 0, l = buffer.length;
+      while (i < l) bs += String.fromCharCode(buffer[i++]);
+      return "data:image/bmp;base64," + btoa(bs);
+    }
+  };
+
+  constructor(
+    public snackBar: MatSnackBar,
+    private mapService: MapService,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: OperationSheetData,
+    private bottomSheetRef: MatBottomSheetRef<BottomSheetOperationSheet>) { }
+
+  ngOnInit() {
+    if (this.data.currentMap.uid !== this.data.currentUser.id) {
+      this.isOwner = false;
+    } else {
+      this.isOwner = true;
+    }
+  }
+
+  dismiss(isSaved): void {
+    this.bottomSheetRef.dismiss({ isSaved: isSaved });
+    event.preventDefault();
+  }
+
+  downloadMap(format) {
+    console.log("format: " + format);
+    // canvas.isGrabMode = false;
+    // canvas.viewportTransform = [1, 0, 0, 1, 0, 0];
+    this.saveCanvasAs(this.data.canvas, format);
+    // this.saveImageURL( this.data.canvas, format);
+    this.dismiss(false);
+  }
+
+  saveImageURL(canvas, format) {
+    canvas.toBlob(blob => {
+      let imageObj = new Image();
+      let url = URL.createObjectURL(blob);
+      imageObj.crossOrigin = 'anonymous';
+      imageObj.onload = function () {
+        // no longer need to read the blob so it's revoked
+        canvas.getContext('2d').drawImage(imageObj, 0, 10);
+        URL.revokeObjectURL(url);
+      };
+
+      let link = document.createElement('a'); // create an anchor tag
+      // set parameters for downloading
+      link.setAttribute('href', url);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('download', this.data.currentMap.name + '.' + format);
+
+      // compat mode for dispatching click on your anchor
+      if (document.createEvent) {
+        let evtObj = document.createEvent('MouseEvents');
+        evtObj.initEvent('click', true, true);
+        link.dispatchEvent(evtObj);
+      } else if (link.click) {
+        link.click();
+      }
+    });
+  }
+
+  saveCanvasAs(canvas, format) {
+    //// get image data and transform mime type to application/octet-stream
+    // let canvasDataUrl = canvas.toDataURL({
+    //   format: format,
+    //   multiplier: this.data.metro.state.ZOOM_FACTOR.max
+    // }, 1.0);
+    let canvasDataUrl = canvas.toDataURL(format, 1.0);
+    let link = document.createElement('a'); // create an anchor tag
+
+    // set parameters for downloading
+    link.setAttribute('href', canvasDataUrl);
+    link.setAttribute('target', '_blank');
+    link.setAttribute('download', this.data.currentMap.name + '.' + format);
+
+    // compat mode for dispatching click on your anchor
+    if (document.createEvent) {
+      let evtObj = document.createEvent('MouseEvents');
+      evtObj.initEvent('click', true, true);
+      link.dispatchEvent(evtObj);
+    } else if (link.click) {
+      link.click();
+    }
   }
 
   saveMap() {
     this.loading = true;
 
     let map = new Map();
-    map.id = this.currentMap.id;
-    map.uid = this.currentMap.uid;
-    map.name = this.currentMap.name;
-    map.img = this.canvas.toDataURL();
-    map.isVisible = this.currentMap.isVisible;
-    map.data = this.convertGraphics2Object(this.metro.graphics);
+    map.id = this.data.currentMap.id;
+    map.uid = this.data.currentMap.uid;
+    map.name = this.data.currentMap.name;
+    map.img = this.data.canvas.toDataURL({
+      format: 'png',
+      multiplier: this.data.metro.state.ZOOM_FACTOR.max
+    });
+    map.isVisible = this.data.currentMap.isVisible;
+    map.data = this.convertGraphics2Object(this.data.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     // console.log("saving map...", map);
 
@@ -195,16 +420,17 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
       .subscribe(
         () => {
           this.loading = false;
-          this.isSave = true;
           this.snackBar.open("save map successfully", "OK", {
             duration: 4000
           });
+          this.dismiss(true);
         },
         error => {
           this.loading = false;
           this.snackBar.open(error.error.error, "OK", {
             duration: 4000
           });
+          this.dismiss(false);
         });
   }
 
@@ -307,25 +533,4 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
       return "{" + kv.join(',') + '}';
     }
   }
-
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.newGraphics();
-    }
-  }
-
-  // @HostListener allows us to also guard against browser refresh, close, etc.
-  @HostListener('window:beforeunload')
-  canDeactivate(): Observable<boolean> | boolean {
-    // insert logic to check if there are pending changes here;
-    // returning true will navigate without confirmation
-    // returning false will show a confirm dialog before navigating away
-    if (this.isSave) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 }

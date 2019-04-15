@@ -26,7 +26,7 @@
       </mat-form-field>
     </div>
 
-    <div class="col l4 m6 s12" *ngFor="let map of maps">
+    <div class="col l4 m6 s12" *ngFor="let map of maps | mapFilter : filterValue">
       <mat-card class="example-card">
         <mat-card-header>
           <div mat-card-avatar class="example-header-image"></div>

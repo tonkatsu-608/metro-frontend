@@ -16,10 +16,11 @@ import { UserService } from '../_service/user.service';
 })
 export class CommunityComponent implements OnInit {
   loading: boolean = false;
-  maps: any[] = null;
   length = 0;
   pageIndex = 0;
   pageSize = 3;
+  filterValue: any;
+  maps: any[] = null;
   pageSizeOptions: number[] = [3, 6, 9, 12];
   displayedColumns: string[] = ['name', 'img', 'createDate', 'editDate', 'isVisible', 'operation'];
 
@@ -34,6 +35,20 @@ export class CommunityComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
+  }
+
+  onPageChange(page) {
+    this.pageIndex = page.pageIndex;
+    this.pageSize = page.pageSize;
+    this.refresh();
+  }
+
+  applyFilter(filterValue: string) {
+    this.filterValue = filterValue;
+  }
+
+  viewMap(id): void {
+    this.router.navigate(['/map/' + id]);
   }
 
   refresh(): void {
@@ -51,23 +66,5 @@ export class CommunityComponent implements OnInit {
       this.length = data['mapCount'];
       this.pageIndex = data['currentPage'] - 1;
     });
-  }
-
-  onPageChange(page) {
-    this.pageIndex = page.pageIndex;
-    this.pageSize = page.pageSize;
-    this.refresh();
-  }
-
-  applyFilter(filterValue: string) {
-    console.log(filterValue);
-    // this.maps.filter = filterValue.trim().toLowerCase();
-    // if (this.maps.paginator) {
-    //   this.maps.paginator.firstPage();
-    // }
-  }
-
-  viewMap(id): void {
-    this.router.navigate(['/map/' + id]);
   }
 }

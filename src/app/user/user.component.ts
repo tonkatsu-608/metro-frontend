@@ -100,7 +100,7 @@ export class UserComponent implements OnInit, OnDestroy {
       data: { mapName: name, id: id }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.id = result;
+      this.mapName = result;
       this.refresh();
     });
   }

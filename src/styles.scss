@@ -19,7 +19,6 @@
 }
 
 .dark-theme {
-  color: $light-primary-text;
   @include angular-material-theme($app-dark-theme);
 }
 

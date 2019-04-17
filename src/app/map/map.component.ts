@@ -5,6 +5,7 @@ import { formatDate } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs';
 
+import { saveAs } from 'file-saver';
 import 'rxjs/add/operator/filter';
 
 import { Map } from '../_model/map.model';
@@ -234,7 +235,6 @@ export class BottomSheetOperationSheet implements OnInit {
      * @return {ArrayBuffer}
      */
     toArrayBuffer: function (canvas) {
-
       let w = canvas.width,
         h = canvas.height,
         w4 = w * 4,
@@ -341,10 +341,44 @@ export class BottomSheetOperationSheet implements OnInit {
 
   downloadMap(format) {
     console.log("format: " + format);
-    // canvas.isGrabMode = false;
-    // canvas.viewportTransform = [1, 0, 0, 1, 0, 0];
-    this.saveCanvasAs(this.data.canvas, format);
+    const
+      name = this.data.currentMap.name,
+      offsetX = this.data.metro.state.transform.x,
+      offsetY = this.data.metro.state.transform.y,
+      realZoomFactor = this.data.metro.state.transform.k,
+      realCanvas = this.data.canvas,
+      fakeCanvas = document.createElement('canvas');
+    fakeCanvas.width = this.data.metro.state.width() * this.data.metro.state.ZOOM_FACTOR.max;
+    fakeCanvas.height = this.data.metro.state.height() * this.data.metro.state.ZOOM_FACTOR.max;
+    // let fakeCanvas: any = new OffscreenCanvas(this.data.metro.state.width() * 4, this.data.metro.state.height() * 4);
+    // let gl = fakeCanvas.getContext('2d');
+    const fakeCanvasContext = fakeCanvas.getContext('2d');
+    fakeCanvasContext.drawImage(this.data.metro.state.canvas, 0, 0);
+
+    this.data.metro.state.transform.x = 0;
+    this.data.metro.state.transform.y = 0;
+    this.data.metro.state.transform.k = this.data.metro.state.ZOOM_FACTOR.max;
+    this.data.metro.state.canvas = fakeCanvas;
+    document.body.appendChild(fakeCanvas);
+    this.data.metro.render();
+    document.body.removeChild(fakeCanvas);
+    // const blob = fakeCanvas.convertToBlob({
+    //   type: "image/jpeg",
+    //   quality: 1
+    // });
+    // saveAs(blob, name);
+    this.data.metro.state.canvas.toBlob(blob => {
+      saveAs(blob, name);
+    });
+    // this.saveCanvasAs(this.data.canvas, format);
     // this.saveImageURL( this.data.canvas, format);
+    this.data.metro.state.transform.x = offsetX;
+    this.data.metro.state.transform.y = offsetY;
+    this.data.metro.state.transform.k = realZoomFactor;
+    this.data.canvas = realCanvas;
+
+    // let arrayBuffer = this.CanvasToBMP.toArrayBuffer(this.data.canvas);
+    // saveAs(new Blob([arrayBuffer], { type: "image/png" }), this.data.currentMap.name, true);
     this.dismiss(false);
   }
 
@@ -358,21 +392,7 @@ export class BottomSheetOperationSheet implements OnInit {
         canvas.getContext('2d').drawImage(imageObj, 0, 10);
         URL.revokeObjectURL(url);
       };
-
-      let link = document.createElement('a'); // create an anchor tag
-      // set parameters for downloading
-      link.setAttribute('href', url);
-      link.setAttribute('target', '_blank');
-      link.setAttribute('download', this.data.currentMap.name + '.' + format);
-
-      // compat mode for dispatching click on your anchor
-      if (document.createEvent) {
-        let evtObj = document.createEvent('MouseEvents');
-        evtObj.initEvent('click', true, true);
-        link.dispatchEvent(evtObj);
-      } else if (link.click) {
-        link.click();
-      }
+      this.download(url);
     });
   }
 
@@ -381,14 +401,21 @@ export class BottomSheetOperationSheet implements OnInit {
     // let canvasDataUrl = canvas.toDataURL({
     //   format: format,
     //   multiplier: this.data.metro.state.ZOOM_FACTOR.max
-    // }, 1.0);
-    let canvasDataUrl = canvas.toDataURL(format, 1.0);
-    let link = document.createElement('a'); // create an anchor tag
+    // }, 1.0)
+    var bitmap = canvas.transferToImageBitmap();
 
+    let url = URL.createObjectURL(bitmap);
+    // let canvasDataUrl = bitmap.toString('base64');
+    // let canvasDataUrl = canvas.toDataURL(format, 1.0);
+    this.download(url);
+  }
+
+  download(url) {
+    let link = document.createElement('a'); // create an anchor tag
     // set parameters for downloading
-    link.setAttribute('href', canvasDataUrl);
+    link.setAttribute('href', url);
     link.setAttribute('target', '_blank');
-    link.setAttribute('download', this.data.currentMap.name + '.' + format);
+    link.setAttribute('download', this.data.currentMap.name + '.' + 'blob');
 
     // compat mode for dispatching click on your anchor
     if (document.createEvent) {

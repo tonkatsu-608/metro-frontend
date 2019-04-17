@@ -1,8 +1,14 @@
 <mat-toolbar color="primary" class="mat-elevation-z6">
   <mat-toolbar-row class="toolbar">
-    <span class="nav-img-span pointer" [routerLink]="['/community']">
+    <span *ngIf="!map" class="nav-img-span pointer" [routerLink]="['/community']">
       <img class="nav-img" src="assets/images/metropolist.png" alt="Metropolist" width="282" height="40">
     </span>
+
+    <span *ngIf="map">
+      <h6 *ngIf="currentUser.id !== map.uid">{{map.firstname}} {{map.lastname}}({{map.email}}): </h6>
+      <h4>{{map.name}}</h4>
+    </span>
+
     <span class="example-spacer"></span>
 
     <button class="nav-btn" mat-icon-button [routerLink]="['/community']" matTooltip="Community"
@@ -32,10 +38,10 @@
       </button>
 
       <button mat-menu-item color="accent" [disabled]="currentTheme === 'dark'" (click)="onChangeTheme('dark')">
-          <mat-icon aria-label="dark theme">brightness_4</mat-icon>
-          <span>Dark Theme</span>
-          <mat-icon aria-label="check" *ngIf="currentTheme === 'dark'" [ngStyle]="{'color': 'green'}">check</mat-icon>
-        </button>
+        <mat-icon aria-label="dark theme">brightness_4</mat-icon>
+        <span>Dark Theme</span>
+        <mat-icon aria-label="check" *ngIf="currentTheme === 'dark'" [ngStyle]="{'color': 'green'}">check</mat-icon>
+      </button>
 
       <button mat-menu-item color="accent" [disabled]="currentTheme === 'nature'" (click)="onChangeTheme('nature')">
         <mat-icon aria-label="nature theme">brightness_6</mat-icon>

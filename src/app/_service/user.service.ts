@@ -17,7 +17,7 @@ export class UserService {
       password: user.password,
       lastname: user.lastname,
       firstname: user.firstname,
-      avatar: "src/assets/images/avatar-0.jpg"
+      avatar: "assets/images/avatar-0.jpg"
     }
 
     return this.http.post(this.rootUrl + `/metro/auth/signup`, body);

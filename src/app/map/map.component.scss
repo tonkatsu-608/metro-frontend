@@ -1,4 +1,4 @@
-.save-btn {
+.open-btn {
   right: 3%;
   bottom: 3%;
   position: fixed;
@@ -53,8 +53,25 @@ table {
   margin-left: 10px;
 }
 
-.dashboard-container {
+.map-container {
+  display: flex;
+}
+
+.canvas-container {
   position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.operation-container {
+  flex: 0 1 auto;
+  overflow: scroll;
+}
+
+.canvas-info, .canvas-panel {
+  margin: 0;
+  padding: 0;
 }
 
 canvas {
@@ -66,12 +83,34 @@ canvas {
   top: 0;
   left: 0;
   z-index: 0;
-  background-color: rgb(203, 197, 185);
 }
 
 #cursorCanvas {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  z-index: 0;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .map-container {
+    display: inherit;
+  }
+
+  .canvas-container {
+    position: relative;
+    width: 100%;
+    min-height: 450px;
+  }
+
+  .operation-container {
+    position: relative;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .canvas-container {
+    min-height: 300px;
+  }
 }

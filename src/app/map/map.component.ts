@@ -10,6 +10,7 @@ import 'rxjs/add/operator/filter';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
+import { UserService } from '../_service/user.service';
 import { MapService } from '../_service/map.service';
 import { ComponentCanDeactivate } from '../_guard/map.guard';
 import { AuthenticationService } from '../_service/authentication.service';
@@ -37,6 +38,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   isSaved: boolean;
   currentMap: Map;
   currentUser: User;
+  mapWithoutData: any;
   currentUserSubscription: Subscription;
 
   canvas: HTMLCanvasElement;
@@ -62,6 +64,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     public snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private mapService: MapService,
+    private userService: UserService,
     private bottomSheet: MatBottomSheet,
     private authenticationService: AuthenticationService) { }
 
@@ -75,6 +78,20 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
         .subscribe(
           data => {
             this.currentMap = data;
+            this.mapWithoutData = {
+              id: data.id,
+              uid: data.uid,
+              name: data.name,
+              isVisible: data.isVisible,
+              createDate: data.createDate,
+              editDate: data.editDate,
+            }
+            this.userService.getUser(this.currentMap.uid).subscribe(user => {
+              this.mapWithoutData.firstname = user.firstname || '';
+              this.mapWithoutData.lastname = user.lastname || '';
+              this.mapWithoutData.email = user.email || '';
+              this.mapWithoutData.avatar = user.avatar || '';
+            });
             this.canvas = d3.select("#myCanvas").node();
             this.cursorCanvas = d3.select("#cursorCanvas").node();
             if (data.data) {
@@ -95,6 +112,14 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
     this.currentUserSubscription.unsubscribe();
+  }
+
+  // resize map
+  Resize() {
+    this.metro.state.transform.x = 0;
+    this.metro.state.transform.y = 0;
+    this.metro.state.transform.k = 1;
+    this.metro.render();
   }
 
   // new graphics
@@ -340,13 +365,12 @@ export class BottomSheetOperationSheet implements OnInit {
   }
 
   downloadMap(format) {
-    console.log("format: " + format);
     const
       name = this.data.currentMap.name,
       offsetX = this.data.metro.state.transform.x,
       offsetY = this.data.metro.state.transform.y,
       realZoomFactor = this.data.metro.state.transform.k,
-      realCanvas = this.data.canvas,
+      realCanvas = this.data.metro.state.canvas,
       fakeCanvas = document.createElement('canvas');
     fakeCanvas.width = this.data.metro.state.width() * this.data.metro.state.ZOOM_FACTOR.max;
     fakeCanvas.height = this.data.metro.state.height() * this.data.metro.state.ZOOM_FACTOR.max;
@@ -375,7 +399,7 @@ export class BottomSheetOperationSheet implements OnInit {
     this.data.metro.state.transform.x = offsetX;
     this.data.metro.state.transform.y = offsetY;
     this.data.metro.state.transform.k = realZoomFactor;
-    this.data.canvas = realCanvas;
+    this.data.metro.state.canvas = realCanvas;
 
     // let arrayBuffer = this.CanvasToBMP.toArrayBuffer(this.data.canvas);
     // saveAs(new Blob([arrayBuffer], { type: "image/png" }), this.data.currentMap.name, true);
@@ -402,8 +426,7 @@ export class BottomSheetOperationSheet implements OnInit {
     //   format: format,
     //   multiplier: this.data.metro.state.ZOOM_FACTOR.max
     // }, 1.0)
-    var bitmap = canvas.transferToImageBitmap();
-
+    let bitmap = canvas.transferToImageBitmap();
     let url = URL.createObjectURL(bitmap);
     // let canvasDataUrl = bitmap.toString('base64');
     // let canvasDataUrl = canvas.toDataURL(format, 1.0);
@@ -434,10 +457,7 @@ export class BottomSheetOperationSheet implements OnInit {
     map.id = this.data.currentMap.id;
     map.uid = this.data.currentMap.uid;
     map.name = this.data.currentMap.name;
-    map.img = this.data.canvas.toDataURL({
-      format: 'png',
-      multiplier: this.data.metro.state.ZOOM_FACTOR.max
-    });
+    map.img = this.data.canvas.toDataURL();
     map.isVisible = this.data.currentMap.isVisible;
     map.data = this.convertGraphics2Object(this.data.metro.graphics);
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');

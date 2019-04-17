@@ -56,9 +56,10 @@ export class CommunityComponent implements OnInit {
       let maps = data['maps'];
       this.maps = maps.map(m => {
         this.userService.getUser(m.uid).subscribe(user => {
-          m.firstname = user.firstname || "";
-          m.lastname = user.lastname || "";
-          m.email = user.email || "";
+          m.firstname = user.firstname || '';
+          m.lastname = user.lastname || '';
+          m.email = user.email || '';
+          m.avatar = user.avatar || '';
         });
         return m;
       });

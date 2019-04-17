@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +15,7 @@ import { AuthenticationService } from '../_service/authentication.service';
 })
 
 export class NavComponent implements OnInit, OnDestroy {
+  @Input() map = null;
   currentTheme: string;
   currentThemeSubscription: Subscription;
   currentUser: User;

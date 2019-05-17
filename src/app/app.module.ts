@@ -22,7 +22,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProfileComponent, DeleteUserDialog } from './profile/profile.component';
 import { CommunityComponent } from './community/community.component';
 import { ThemeService } from './_service/theme.service';
-import { FilterPipe} from './_pipe/filter.pipe';
+import { FilterPipe } from './_pipe/filter.pipe';
 
 @NgModule({
   declarations: [

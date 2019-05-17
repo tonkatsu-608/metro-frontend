@@ -38,7 +38,7 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    return this.http.post<any>('http://localhost:3000/metro/api/v1/logout', null);
+    return this.http.post<any>('http://localhost:3000/metro/auth/logout', null);
   }
 
   updateLocalStoragelUser(user) {

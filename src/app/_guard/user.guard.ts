@@ -18,7 +18,7 @@ export class UserGuard implements CanActivate {
         }
 
         // not user, redirect to dashboard page with the return url
-        this.router.navigate(['/dashboard'], { queryParams: { returnUrl: state.url }});
+        this.router.navigate(['/community'], { queryParams: { returnUrl: state.url }});
         return false;
     }
 }

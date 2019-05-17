@@ -63,7 +63,7 @@
               </mat-card-header>
               <mat-card-content>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
+                  <input matInput placeholder="Verify old password" formControlName="password" [type]="hide ? 'password' : 'text'">
                   <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
                   </mat-icon>
                   <mat-error *ngIf="passwordForm.controls['password'].errors?.minLength">Minimum 3 characters needed.
@@ -88,7 +88,7 @@
               </mat-card-header>
               <mat-card-content>
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="New Password" formControlName="newPassword"
+                  <input matInput placeholder="New password" formControlName="newPassword"
                     [type]="hide ? 'password' : 'text'">
                   <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
                   </mat-icon>
@@ -97,7 +97,7 @@
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Confirm Password" formControlName="confirmNewPassword"
+                  <input matInput placeholder="Confirm new password" formControlName="confirmNewPassword"
                     [type]="hide ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher">
                   <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
                   </mat-icon>
@@ -132,7 +132,7 @@
           </form>
         </div>
 
-        <div class="col l6 s12">
+        <!-- <div class="col l6 s12">
           <form [formGroup]="deleteForm" (ngSubmit)="onBlock()">
             <mat-card class="profile-card mat-elevation-z4">
               <mat-card-header class="update-header">
@@ -150,7 +150,8 @@
               </mat-card-actions>
             </mat-card>
           </form>
-        </div>
+        </div> -->
+
       </div>
     </mat-tab>
 

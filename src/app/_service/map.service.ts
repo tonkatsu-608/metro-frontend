@@ -9,23 +9,23 @@ export class MapService {
 
   constructor(private http: HttpClient) { }
 
-  getMap(id: string) {
-    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/map/` + id);
+  getMap(mid: string) {
+    return this.http.get<Map>(this.rootUrl + `/metro/api/v1/maps/${mid}`);
   }
 
   getMaps(page: number, limit: number) {
-    return this.http.get<any[]>(this.rootUrl + `/metro/api/v1/maps/?page=` + page + `&limit=` + limit);
+    return this.http.get<any[]>(this.rootUrl + `/metro/api/v1/maps/?page=${page}&limit=${limit}`);
   }
 
   createMap(map: Map) {
-    return this.http.post(this.rootUrl + `/metro/api/v1/map/create`, map);
+    return this.http.post(this.rootUrl + `/metro/api/v1/maps`, map);
   }
 
-  saveMap(map: Map) {
-    return this.http.put(this.rootUrl + `/metro/api/v1/map/update`, map);
+  saveMap(map: Map, mid: string) {
+    return this.http.put(this.rootUrl + `/metro/api/v1/maps/${mid}`, map);
   }
 
-  deleteMap(id: string) {
-    return this.http.delete(this.rootUrl + `/metro/api/v1/map/delete/` + id);
+  deleteMap(mid: string) {
+    return this.http.delete(this.rootUrl + `/metro/api/v1/maps/${mid}`);
   }
 }

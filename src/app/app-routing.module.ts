@@ -19,8 +19,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'community', component: CommunityComponent, canActivate: [AuthGuard] },
-  { path: 'map/:id', component: MapComponent, canActivate: [UserGuard],canDeactivate: [MapGuard] },
-  // otherwise redirect to home
+  { path: 'map/:id', component: MapComponent, canActivate: [UserGuard], canDeactivate: [MapGuard] },
   { path: '**',  component: PageNotFoundComponent }
 ];
 

@@ -24,7 +24,6 @@ export interface DialogData {
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-  isUpdate: boolean = false;
   loading: boolean = false;
   id: string;
   mapName: string;
@@ -65,17 +64,15 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   isVisibleOnChange(row, element): void {
-    this.isUpdate = true;
     this.loading = true;
 
     let map = new Map();
     map.id = row.id;
     map.isVisible = element.checked;
-    this.mapService.saveMap(map)
+    this.mapService.saveMap(map, map.id)
       .subscribe(
         () => {
           this.loading = false;
-          this.isUpdate = false;
           this.snackBar.open("update map successfully", "OK", {
             duration: 2000
           });

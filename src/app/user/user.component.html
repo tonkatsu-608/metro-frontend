@@ -55,7 +55,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> isVisible </th>
         <td mat-cell *matCellDef="let row">
           <!-- private &nbsp;&nbsp; -->
-          <mat-slide-toggle color="accent" [checked]="row.isVisible" [disabled]="isUpdate"
+          <mat-slide-toggle color="accent" [checked]="row.isVisible"
             (change)="isVisibleOnChange(row, $event)"></mat-slide-toggle>
           <!-- &nbsp;&nbsp; public -->
         </td>

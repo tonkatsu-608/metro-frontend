@@ -45,7 +45,7 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
   cursorCanvas: HTMLCanvasElement;
 
   // map settings
-  sites = 100;
+  sites = 128;
   VIEW_MODES = new Set(['elevation']);
   EDIT_MODES = new Set();
   elevation_view_checked = true;
@@ -376,8 +376,8 @@ export class BottomSheetOperationSheet implements OnInit {
     fakeCanvas.height = this.data.metro.state.height() * this.data.metro.state.ZOOM_FACTOR.max;
     // let fakeCanvas: any = new OffscreenCanvas(this.data.metro.state.width() * 4, this.data.metro.state.height() * 4);
     // let gl = fakeCanvas.getContext('2d');
-    const fakeCanvasContext = fakeCanvas.getContext('2d');
-    fakeCanvasContext.drawImage(this.data.metro.state.canvas, 0, 0);
+    // const fakeCanvasContext = fakeCanvas.getContext('2d');
+    // fakeCanvasContext.drawImage(this.data.metro.state.canvas, 0, 0);
 
     this.data.metro.state.transform.x = 0;
     this.data.metro.state.transform.y = 0;
@@ -463,7 +463,7 @@ export class BottomSheetOperationSheet implements OnInit {
     map.editDate = formatDate(new Date(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
     // console.log("saving map...", map);
 
-    this.mapService.saveMap(map)
+    this.mapService.saveMap(map, map.id)
       .subscribe(
         () => {
           this.loading = false;

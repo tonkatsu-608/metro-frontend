@@ -1,11 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { MatPaginator } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatPaginator, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { Map } from '../_model/map.model';
-import { User } from '../_model/user.model';
 import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
 

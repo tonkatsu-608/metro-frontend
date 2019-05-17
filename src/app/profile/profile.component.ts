@@ -260,8 +260,8 @@ export class DeleteUserDialog {
 
   onDelete(): void {
     this.loading = true;
-    this.authenticationService.logout().subscribe()
-    this.userService.blockUser(this.data.user)
+    this.authenticationService.logout();
+    this.userService.updteEnabled(this.data.user, this.data.user.id)
       .subscribe(
         (data: User) => {
           this.loading = false;

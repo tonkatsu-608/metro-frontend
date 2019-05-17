@@ -23,8 +23,8 @@ export class UserService {
     return this.http.post(this.rootUrl + `/metro/auth/signup`, body);
   }
 
-  getUser(id: string) {
-    return this.http.get<User>(this.rootUrl + `/metro/api/v1/user/` + id);
+  getUser(uid: string) {
+    return this.http.get<User>(this.rootUrl + `/metro/api/v1/users/${uid}`);
   }
 
   getUsers() {
@@ -32,43 +32,43 @@ export class UserService {
   }
 
   getMaps(uid: string) {
-    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/user/${uid}/maps/`);
+    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/users/${uid}/maps/`);
   }
 
-  verifyPassword(password: string, id: string) {
+  verifyPassword(password: string, uid: string) {
     const body = {
-      id: id,
+      id: uid,
       password: password
     }
-    return this.http.patch(this.rootUrl + `/metro/api/v1/user/verify/password`, body);
+    return this.http.patch(this.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
   }
 
-  updateEmail(email: string, id: string) {
+  updateEmail(email: string, uid: string) {
     const body = {
-      id: id,
+      id: uid,
       email: email
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/email`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/email`, body);
   }
 
-  updateName(firstname: string, lastname: string, id: string) {
+  updateName(firstname: string, lastname: string, uid: string) {
     const body = {
-      id: id,
+      id: uid,
       firstname: firstname,
       lastname: lastname
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/name`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/name`, body);
   }
 
-  updatePassword(password: string, id: string) {
+  updatePassword(password: string, uid: string) {
     const body = {
-      id: id,
+      id: uid,
       password: password
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/password`, body);
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
   }
 
-  blockUser(user: User) {
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/user/update/enabled`, user);
+  updteEnabled(user: User, uid: string) {
+    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${user.id}/enabled`, user);
   }
 }

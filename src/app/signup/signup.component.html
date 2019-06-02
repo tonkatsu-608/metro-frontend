@@ -45,8 +45,8 @@
             <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
             </mat-icon>
             <mat-error *ngIf="signUpForm.controls['password'].errors?.required">Password is required.</mat-error>
-            <mat-error *ngIf="signUpForm.controls['password'].errors?.minLength">Minimum 3 characters needed.
-            </mat-error>
+            <mat-error *ngIf="signUpForm.controls['password'].errors?.minLength">Minimum 6 characters needed.</mat-error>
+            <mat-error *ngIf="signUpForm.controls['password'].errors?.pattern">Lowercase, uppercase and number needed.</mat-error>
           </mat-form-field>
         </div>
 
@@ -57,7 +57,7 @@
               [type]="hide ? 'password' : 'text'" [errorStateMatcher]="passwordMatcher">
             <mat-icon matSuffix (click)="hide = !hide" class="pointer">{{hide ? 'visibility_off' : 'visibility'}}
             </mat-icon>
-            <mat-error *ngIf="signUpForm.hasError('notSame')">Passwords do not match</mat-error>
+            <mat-error *ngIf="signUpForm.hasError('notSame')">Passwords do not match.</mat-error>
           </mat-form-field>
         </div>
 

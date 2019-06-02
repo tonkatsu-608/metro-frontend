@@ -1,4 +1,6 @@
 <div class="wrapper" [ngClass]="theme === undefined ? '' : theme + '-theme'">
+  <!-- <app-nav *ngIf="auth.loggedIn"></app-nav> -->
+
   <div class="content mat-app-background">
     <router-outlet></router-outlet>
   </div>
@@ -8,7 +10,7 @@
       <mat-toolbar-row>
         <div class="row">
           <div class="col l12 m12 s12">
-              <span>&#169; {{year}} - Shizheng Yang</span>
+            <span>&#169; {{year}} - Shizheng Yang</span>
           </div>
         </div>
       </mat-toolbar-row>

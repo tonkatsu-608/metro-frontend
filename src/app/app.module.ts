@@ -2,11 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material';
 import { MaterialModule } from './material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { JwtModule } from '@auth0/angular-jwt';
+import { TokenInterceptor } from './_interceptor/token.interceptor';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -23,6 +25,10 @@ import { ProfileComponent, DeleteUserDialog } from './profile/profile.component'
 import { CommunityComponent } from './community/community.component';
 import { ThemeService } from './_service/theme.service';
 import { FilterPipe } from './_pipe/filter.pipe';
+
+export function tokenGetter() {
+  return localStorage.getItem('METRO_ACCESS_TOKEN');
+}
 
 @NgModule({
   declarations: [
@@ -52,9 +58,25 @@ import { FilterPipe } from './_pipe/filter.pipe';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        whitelistedDomains: ['localhost:4200'],
+        blacklistedRoutes: []
+      }
+    }),
   ],
-  providers: [UserService, ThemeService, MapGuard],
+  providers: [
+    UserService,
+    ThemeService,
+    MapGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [CreateMapDialog, DeleteMapDialog, DeleteUserDialog, BottomSheetOperationSheet]
 })

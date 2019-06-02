@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
+import { Auth } from '../_service/auth.service';
 
 @Component({
   selector: 'app-community',
@@ -25,6 +26,7 @@ export class CommunityComponent implements OnInit {
   constructor(
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
+    private auth: Auth,
     private router: Router,
     private mapService: MapService,
     private userService: UserService) { }

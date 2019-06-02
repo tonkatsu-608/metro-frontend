@@ -3,36 +3,36 @@ import { HttpClient } from '@angular/common/http';
 
 import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
+import { config } from '../../config';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-  private rootUrl = `http://localhost:3000`;
   constructor(private http: HttpClient) { }
 
   signup(user: User) {
     const body = {
-      role: "user",
+      role: `user`,
       enabled: true,
       email: user.email,
       password: user.password,
       lastname: user.lastname,
       firstname: user.firstname,
-      avatar: "assets/images/avatar-0.jpg"
+      avatar: config.DEFAULT_AVATAR
     }
 
-    return this.http.post(this.rootUrl + `/metro/auth/signup`, body);
+    return this.http.post(config.rootUrl + `/metro/auth/signup`, body);
   }
 
   getUser(uid: string) {
-    return this.http.get<User>(this.rootUrl + `/metro/api/v1/users/${uid}`);
+    return this.http.get<User>(config.rootUrl + `/metro/api/v1/users/${uid}`);
   }
 
   getUsers() {
-    return this.http.get<User[]>(this.rootUrl + `/metro/api/v1/users`);
+    return this.http.get<User[]>(config.rootUrl + `/metro/api/v1/users`);
   }
 
   getMaps(uid: string) {
-    return this.http.get<Map[]>(this.rootUrl + `/metro/api/v1/users/${uid}/maps/`);
+    return this.http.get<Map[]>(config.rootUrl + `/metro/api/v1/users/${uid}/maps/`);
   }
 
   verifyPassword(password: string, uid: string) {
@@ -40,7 +40,7 @@ export class UserService {
       id: uid,
       password: password
     }
-    return this.http.patch(this.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
+    return this.http.patch(config.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
   }
 
   updateEmail(email: string, uid: string) {
@@ -48,7 +48,7 @@ export class UserService {
       id: uid,
       email: email
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/email`, body);
+    return this.http.put<any>(config.rootUrl + `/metro/api/v1/users/${uid}/email`, body);
   }
 
   updateName(firstname: string, lastname: string, uid: string) {
@@ -57,7 +57,7 @@ export class UserService {
       firstname: firstname,
       lastname: lastname
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/name`, body);
+    return this.http.put<any>(config.rootUrl + `/metro/api/v1/users/${uid}/name`, body);
   }
 
   updatePassword(password: string, uid: string) {
@@ -65,10 +65,10 @@ export class UserService {
       id: uid,
       password: password
     }
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
+    return this.http.put<any>(config.rootUrl + `/metro/api/v1/users/${uid}/password`, body);
   }
 
   updteEnabled(user: User, uid: string) {
-    return this.http.put<User>(this.rootUrl + `/metro/api/v1/users/${user.id}/enabled`, user);
+    return this.http.put<any>(config.rootUrl + `/metro/api/v1/users/${user.id}/enabled`, user);
   }
 }

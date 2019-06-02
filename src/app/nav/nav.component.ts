@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
 import { ThemeService } from '../_service/theme.service';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -24,9 +23,9 @@ export class NavComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private themeService: ThemeService,
-    private authenticationService: AuthenticationService,
+    private auth: Auth,
     public snackBar: MatSnackBar) {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
   }
@@ -50,8 +49,12 @@ export class NavComponent implements OnInit, OnDestroy {
     });
   }
 
+  // goProfile() {
+  //   this.router.navigate(['/user/' + this.currentUser.id]);
+  // }
+
   logout() {
-    this.authenticationService.logout();
+    this.auth.logout();
     this.router.navigate(['/login']).then(() => {
       this.snackBar.open("Logout successfully", "OK", {
         duration: 5000

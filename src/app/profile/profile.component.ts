@@ -9,7 +9,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -49,11 +49,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private authenticationService: AuthenticationService,
+    private auth: Auth,
     public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
     this.emailForm = this.formBuilder.group({
@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: User) => {
           this.loading = false;
-          this.authenticationService.updateLocalStoragelUser(data);
+          this.auth.updateLocalStoragelUser(data);
           this.ngOnInit();
           this.snackBar.open("email updated successfully", "OK", {
             duration: 4000
@@ -115,7 +115,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: User) => {
           this.loading = false;
-          this.authenticationService.updateLocalStoragelUser(data);
+          this.auth.updateLocalStoragelUser(data);
           this.ngOnInit();
           this.snackBar.open("name updated successfully", "OK", {
             duration: 4000
@@ -137,12 +137,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.userService.updatePassword(this.confirmPasswordForm.value.confirmNewPassword, this.currentUser.id)
       .subscribe(
-        (data: User) => {
+        data => {
           this.loading = false;
-          this.authenticationService.updateLocalStoragelUser(data);
           this.ngOnInit();
           this.isConfirmed = false;
-          this.snackBar.open("password updated successfully", "OK", {
+          this.snackBar.open(data.msg, "OK", {
             duration: 4000
           });
         },
@@ -249,7 +248,7 @@ export class DeleteUserDialog {
   constructor(
     private router: Router,
     private userService: UserService,
-    private authenticationService: AuthenticationService,
+    private auth: Auth,
     public snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<DeleteUserDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
@@ -260,14 +259,14 @@ export class DeleteUserDialog {
 
   onDelete(): void {
     this.loading = true;
-    this.authenticationService.logout();
+    this.auth.logout();
     this.userService.updteEnabled(this.data.user, this.data.user.id)
       .subscribe(
         (data: User) => {
           this.loading = false;
           if (data.enabled === false) {
             this.router.navigate(['/login']).then(() => {
-              this.authenticationService.logout();
+              this.auth.logout();
               this.snackBar.open("account deleted, good bye :)", "OK", {
                 duration: 4000
               });

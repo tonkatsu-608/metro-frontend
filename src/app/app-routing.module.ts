@@ -16,10 +16,11 @@ const routes: Routes = [
   { path: '',  redirectTo: '/community', pathMatch: 'full', canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: 'community', component: CommunityComponent, canActivate: [AuthGuard] },
-  { path: 'map/:id', component: MapComponent, canActivate: [UserGuard], canDeactivate: [MapGuard] },
+  // { path: 'user/:uid', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], canLoad: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], canLoad: [AuthGuard] },
+  { path: 'community', component: CommunityComponent, canActivate: [AuthGuard], canLoad: [AuthGuard] },
+  { path: 'map/:mid', component: MapComponent, canActivate: [AuthGuard], canLoad: [UserGuard], canDeactivate: [MapGuard] },
   { path: '**',  component: PageNotFoundComponent }
 ];
 

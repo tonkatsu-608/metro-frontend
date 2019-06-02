@@ -5,7 +5,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -25,17 +25,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private authenticationService: AuthenticationService,
+    private auth: Auth,
     public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
 
     // if user is already logged in, redirecting to /dashboard
     if(this.currentUser) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/community']);
     }
 
     this.loginForm = this.formBuilder.group({
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: new FormControl('', [Validators.required, Validators.minLength(3)])
     });
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/community';
   }
 
   ngOnDestroy() {
@@ -61,11 +61,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.loading = true;
     // this.userService.login(this.loginForm.value)
-    this.authenticationService.login(this.f.email.value, this.f.password.value)
+    this.auth.login(this.f.email.value, this.f.password.value)
       .subscribe(
         data => {
           this.router.navigate([this.returnUrl]).then(() => {
-            this.snackBar.open("welcome back, " + data.user.firstname, "OK", {
+            this.snackBar.open(`welcome to Metropolist, ${data}`, "OK", {
               duration: 4000
             });
           });

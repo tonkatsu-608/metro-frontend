@@ -7,7 +7,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -35,22 +35,24 @@ export class SignupComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     public snackBar: MatSnackBar,
-    private authenticationService: AuthenticationService) { }
+    private auth: Auth) { }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
     // if user is already logged in, redirecting to /dashboard
     if (this.currentUser) {
       this.router.navigate(['/dashboard']);
     }
+
     this.signUpForm = this.formBuilder.group({
       $key: new FormControl(null),
       email: new FormControl('', [Validators.required, Validators.email]),
       firstname: new FormControl('', [Validators.required]),
       lastname: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.minLength(3), Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')]),
+      // password: new FormControl('', [Validators.minLength(3), Validators.required]),
       confirmPassword: new FormControl('', [Validators.minLength(3), Validators.required]),
     },
       { validator: this.ValidatePassword });

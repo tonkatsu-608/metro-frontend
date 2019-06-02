@@ -10,7 +10,7 @@ import { Map } from '../_model/map.model';
 import { User } from '../_model/user.model';
 import { MapService } from '../_service/map.service';
 import { UserService } from '../_service/user.service';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 export interface DialogData {
   id: string;
@@ -42,10 +42,10 @@ export class UserComponent implements OnInit, OnDestroy {
     private router: Router,
     private mapService: MapService,
     private userService: UserService,
-    private authenticationService: AuthenticationService) { }
+    private auth: Auth) { }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
     this.refresh();

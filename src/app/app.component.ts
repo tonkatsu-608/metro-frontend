@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ThemeService } from './_service/theme.service';
+import { Auth } from './_service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,9 @@ export class AppComponent implements OnInit, OnDestroy {
   theme: string;
   themeSubscription: Subscription;
 
-  constructor(private themeService: ThemeService) { }
+  constructor(
+    private themeService: ThemeService,
+    private auth: Auth) { }
 
   ngOnInit() {
     this.themeSubscription = this.themeService.theme.subscribe(t => {

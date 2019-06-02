@@ -13,7 +13,7 @@ import { User } from '../_model/user.model';
 import { UserService } from '../_service/user.service';
 import { MapService } from '../_service/map.service';
 import { ComponentCanDeactivate } from '../_guard/map.guard';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 declare const d3: any;
 declare const Metro: any;
@@ -66,15 +66,15 @@ export class MapComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     private mapService: MapService,
     private userService: UserService,
     private bottomSheet: MatBottomSheet,
-    private authenticationService: AuthenticationService) { }
+    private auth: Auth) { }
 
   ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+    this.currentUserSubscription = this.auth.currentUser.subscribe(user => {
       this.currentUser = user;
     });
     this.currentMap = new Map();
     this.route.params.subscribe(params => {
-      this.mapService.getMap(params['id'])
+      this.mapService.getMap(params['mid'])
         .subscribe(
           data => {
             this.currentMap = data;

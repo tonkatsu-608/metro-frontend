@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { User } from '../_model/user.model';
-import { AuthenticationService } from '../_service/authentication.service';
+import { Auth } from '../_service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,8 +15,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isAdmin: boolean;
   currentUserSubscription: Subscription;
 
-  constructor(private authenticationService: AuthenticationService) {
-    this.currentUserSubscription = this.authenticationService.currentUser
+  constructor(private auth: Auth) {
+    this.currentUserSubscription = this.auth.currentUser
       .subscribe(user => {
         this.currentUser = user;
         if (this.currentUser && this.currentUser.role === 'user') { this.isUser = true; } else { this.isUser = false; }
